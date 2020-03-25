@@ -86,8 +86,8 @@ func Listen(address string, port int) (net.Listener, error) {
 	return l, err
 }
 
-// smcDial is a SMC version of Dial()
-func smcDial(address string, port int) (net.Conn, error) {
+// Dial creates a SMC connection to address and port
+func Dial(address string, port int) (net.Conn, error) {
 	var conn net.Conn
 	var err error
 	var fd int
