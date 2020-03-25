@@ -43,8 +43,8 @@ func createSockaddr(address string, port int) (typ string, s unix.Sockaddr) {
 	return "err", nil
 }
 
-// smcListen is a SMC version of Listen()
-func smcListen(address string, port int) (net.Listener, error) {
+// Listen creates a SMC listener that listens on address and port
+func Listen(address string, port int) (net.Listener, error) {
 	var l net.Listener
 	var err error
 	var fd int
