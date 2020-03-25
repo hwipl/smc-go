@@ -14,7 +14,8 @@ const (
 	SMCProtoIPv6 = 1
 )
 
-// parse ip address and return IPv4 and IPv6 address
+// parseIP parses the ip address in the string address and returns an IPv4 and
+// an IPv6 address
 func parseIP(address string) (net.IP, net.IP) {
 	ip := net.ParseIP(address)
 	if ip == nil {
@@ -23,7 +24,7 @@ func parseIP(address string) (net.IP, net.IP) {
 	return ip.To4(), ip.To16()
 }
 
-// construct socket address
+// createSockAddr constructs a socket address from address and port
 func createSockaddr(address string, port int) (typ string, s unix.Sockaddr) {
 	ipv4, ipv6 := parseIP(address)
 	if ipv4 != nil {
@@ -42,7 +43,7 @@ func createSockaddr(address string, port int) (typ string, s unix.Sockaddr) {
 	return "err", nil
 }
 
-// SMC version of Listen()
+// smcListen is a SMC version of Listen()
 func smcListen(address string, port int) (net.Listener, error) {
 	var l net.Listener
 	var err error
@@ -85,7 +86,7 @@ func smcListen(address string, port int) (net.Listener, error) {
 	return l, err
 }
 
-// SMC version of Dial()
+// smcDial is a SMC version of Dial()
 func smcDial(address string, port int) (net.Conn, error) {
 	var conn net.Conn
 	var err error
