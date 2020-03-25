@@ -8,10 +8,10 @@ import (
 	"golang.org/x/sys/unix"
 )
 
-// SMC definitions
+// SMC protocol definitions
 const (
-	SMCProtoIPv4 = 0
-	SMCProtoIPv6 = 1
+	protoIPv4 = 0
+	protoIPv6 = 1
 )
 
 // parseIP parses the ip address in the string address and returns an IPv4 and
@@ -58,10 +58,10 @@ func Listen(address string, port int) (net.Listener, error) {
 	// create socket
 	if typ == "ipv4" {
 		fd, err = unix.Socket(unix.AF_SMC, unix.SOCK_STREAM,
-			SMCProtoIPv4)
+			protoIPv4)
 	} else {
 		fd, err = unix.Socket(unix.AF_SMC, unix.SOCK_STREAM,
-			SMCProtoIPv6)
+			protoIPv6)
 	}
 	if err != nil {
 		return l, err
@@ -101,10 +101,10 @@ func Dial(address string, port int) (net.Conn, error) {
 	// create socket
 	if typ == "ipv4" {
 		fd, err = unix.Socket(unix.AF_SMC, unix.SOCK_STREAM,
-			SMCProtoIPv4)
+			protoIPv4)
 	} else {
 		fd, err = unix.Socket(unix.AF_SMC, unix.SOCK_STREAM,
-			SMCProtoIPv6)
+			protoIPv6)
 	}
 
 	if err != nil {
