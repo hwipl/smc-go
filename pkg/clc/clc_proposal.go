@@ -44,7 +44,7 @@ type Proposal struct {
 	IPv6PrefixesCnt uint8 // number of IPv6 prefixes in prefix array
 	IPv6Prefixes    []IPv6Prefix
 
-	trailer
+	Trailer
 }
 
 // String converts the CLC Proposal message to a string
@@ -70,7 +70,7 @@ func (p *Proposal) String() string {
 		"IPv6 Prefix Count: %d%s, Trailer: %s"
 	return fmt.Sprintf(proposalFmt, p.Header.String(), p.SenderPeerID,
 		p.IBGID, p.IBMAC, p.IPAreaOffset, smcdInfo, p.Prefix,
-		p.PrefixLen, p.IPv6PrefixesCnt, ipv6Prefixes, p.trailer)
+		p.PrefixLen, p.IPv6PrefixesCnt, ipv6Prefixes, p.Trailer)
 }
 
 // Reserved converts the CLC Proposal message to a string including reserved
@@ -98,7 +98,7 @@ func (p *Proposal) Reserved() string {
 	return fmt.Sprintf(proposalFmt, p.Header.Reserved(), p.SenderPeerID,
 		p.IBGID, p.IBMAC, p.IPAreaOffset, smcdInfo, p.Prefix,
 		p.PrefixLen, p.reserved2, p.IPv6PrefixesCnt, ipv6Prefixes,
-		p.trailer)
+		p.Trailer)
 }
 
 // Parse parses the CLC Proposal message in buf
@@ -151,7 +151,7 @@ func (p *Proposal) Parse(buf []byte) {
 	}
 
 	// make sure we do not read outside the message
-	if int(p.Length)-skip < net.IPv4len+1+2+1+trailerLen {
+	if int(p.Length)-skip < net.IPv4len+1+2+1+TrailerLen {
 		log.Println("Error parsing CLC Proposal: " +
 			"IP Area Offset too big")
 		errDump(buf[:p.Length])
@@ -180,7 +180,7 @@ func (p *Proposal) Parse(buf []byte) {
 		skip++
 
 		// make sure we are still inside the clc message
-		if int(p.Length)-skip < IPv6PrefixLen+trailerLen {
+		if int(p.Length)-skip < IPv6PrefixLen+TrailerLen {
 			log.Println("Error parsing CLC Proposal: " +
 				"IPv6 prefix count too big")
 			errDump(buf[:p.Length])
@@ -202,5 +202,5 @@ func (p *Proposal) Parse(buf []byte) {
 	}
 
 	// save trailer
-	p.trailer.Parse(buf)
+	p.Trailer.Parse(buf)
 }

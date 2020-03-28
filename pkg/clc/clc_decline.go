@@ -100,7 +100,7 @@ type Decline struct {
 	SenderPeerID  PeerID        // sender peer id
 	PeerDiagnosis PeerDiagnosis // diagnosis information
 	reserved      [4]byte
-	trailer
+	Trailer
 }
 
 // String converts the CLC Decline message to a string
@@ -111,7 +111,7 @@ func (d *Decline) String() string {
 
 	declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, Trailer: %s"
 	return fmt.Sprintf(declineFmt, d.Header.String(), d.SenderPeerID,
-		d.PeerDiagnosis, d.trailer)
+		d.PeerDiagnosis, d.Trailer)
 }
 
 // Reserved converts the CLC Decline message to a string including reserved
@@ -124,7 +124,7 @@ func (d *Decline) Reserved() string {
 	declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, Reserved: %#x, " +
 		"Trailer: %s"
 	return fmt.Sprintf(declineFmt, d.Header.Reserved(), d.SenderPeerID,
-		d.PeerDiagnosis, d.reserved, d.trailer)
+		d.PeerDiagnosis, d.reserved, d.Trailer)
 }
 
 // Parse parses the CLC Decline in buf
@@ -158,5 +158,5 @@ func (d *Decline) Parse(buf []byte) {
 	buf = buf[4:]
 
 	// save trailer
-	d.trailer.Parse(buf)
+	d.Trailer.Parse(buf)
 }

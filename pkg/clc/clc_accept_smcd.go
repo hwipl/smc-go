@@ -22,7 +22,7 @@ type AcceptSMCD struct {
 	reserved2 [2]byte
 	LinkID    uint32 // Link identifier
 	reserved3 [12]byte
-	trailer
+	Trailer
 }
 
 // String converts the CLC SMC-D Accept message to a string
@@ -34,7 +34,7 @@ func (ac *AcceptSMCD) String() string {
 	acFmt := "%s, SMC-D GID: %d, SMC-D Token: %d, DMBE Index: %d, " +
 		"DMBE Size: %s, Link ID: %d, Trailer: %s"
 	return fmt.Sprintf(acFmt, ac.Header.String(), ac.GID, ac.Token,
-		ac.DMBEIdx, ac.DMBESize, ac.LinkID, ac.trailer)
+		ac.DMBEIdx, ac.DMBESize, ac.LinkID, ac.Trailer)
 }
 
 // Reserved converts the CLC SMC-D Accept message to a string including
@@ -49,7 +49,7 @@ func (ac *AcceptSMCD) Reserved() string {
 		"Link ID: %d, Reserved: %#x, Trailer: %s"
 	return fmt.Sprintf(acFmt, ac.Header.Reserved(), ac.GID,
 		ac.Token, ac.DMBEIdx, ac.DMBESize, ac.reserved,
-		ac.reserved2, ac.LinkID, ac.reserved3, ac.trailer)
+		ac.reserved2, ac.LinkID, ac.reserved3, ac.Trailer)
 }
 
 // Parse parses the SMC-D Accept message in buf
@@ -104,5 +104,5 @@ func (ac *AcceptSMCD) Parse(buf []byte) {
 	buf = buf[12:]
 
 	// save trailer
-	ac.trailer.Parse(buf)
+	ac.Trailer.Parse(buf)
 }

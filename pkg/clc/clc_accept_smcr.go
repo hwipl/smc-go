@@ -57,7 +57,7 @@ type AcceptSMCR struct {
 	RMBDMAAddr     uint64 // RMB virtual address
 	reserved2      byte
 	PSN            int // packet sequence number
-	trailer
+	Trailer
 }
 
 // String converts the CLC SMC-R Accept message to a string
@@ -74,7 +74,7 @@ func (ac *AcceptSMCR) String() string {
 	return fmt.Sprintf(acFmt, ac.Header.String(), ac.SenderPeerID,
 		ac.IBGID, ac.IBMAC, ac.QPN, ac.RMBRKey, ac.RMBEIdx,
 		ac.RMBEAlertToken, ac.RMBESize, ac.QPMTU, ac.RMBDMAAddr,
-		ac.PSN, ac.trailer)
+		ac.PSN, ac.Trailer)
 }
 
 // Reserved converts the CLC SMC-R Accept message to a string including
@@ -92,7 +92,7 @@ func (ac *AcceptSMCR) Reserved() string {
 	return fmt.Sprintf(acFmt, ac.Header.Reserved(), ac.SenderPeerID,
 		ac.IBGID, ac.IBMAC, ac.QPN, ac.RMBRKey, ac.RMBEIdx,
 		ac.RMBEAlertToken, ac.RMBESize, ac.QPMTU, ac.reserved,
-		ac.RMBDMAAddr, ac.reserved2, ac.PSN, ac.trailer)
+		ac.RMBDMAAddr, ac.reserved2, ac.PSN, ac.Trailer)
 }
 
 // Parse parses the SMC-R Accept message in buf
@@ -173,5 +173,5 @@ func (ac *AcceptSMCR) Parse(buf []byte) {
 	buf = buf[3:]
 
 	// save trailer
-	ac.trailer.Parse(buf)
+	ac.Trailer.Parse(buf)
 }
