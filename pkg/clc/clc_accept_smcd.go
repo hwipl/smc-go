@@ -17,7 +17,7 @@ type AcceptSMCD struct {
 	GID       uint64   // Sender GID
 	Token     uint64   // DMB token
 	DMBEIdx   uint8    // DMBE index
-	DMBESize  rmbeSize // 4 bits buf size (compressed)
+	DMBESize  RMBESize // 4 bits buf size (compressed)
 	reserved  byte     // 4 bits reserved
 	reserved2 [2]byte
 	LinkID    uint32 // Link identifier
@@ -87,7 +87,7 @@ func (ac *AcceptSMCD) Parse(buf []byte) {
 	buf = buf[1:]
 
 	// 1 byte bitfield: dmbe size (4 bits), reserved (4 bits)
-	ac.DMBESize = rmbeSize((uint8(buf[0]) & 0b11110000) >> 4)
+	ac.DMBESize = RMBESize((uint8(buf[0]) & 0b11110000) >> 4)
 	ac.reserved = buf[0] & 0b00001111
 	buf = buf[1:]
 

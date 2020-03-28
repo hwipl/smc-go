@@ -51,7 +51,7 @@ type AcceptSMCR struct {
 	RMBRKey        uint32           // RMB rkey
 	RMBEIdx        uint8            // Index of RMBE in RMB
 	RMBEAlertToken uint32           // unique connection id
-	RMBESize       rmbeSize         // 4 bits buf size (compressed)
+	RMBESize       RMBESize         // 4 bits buf size (compressed)
 	QPMTU          QPMTU            // 4 bits QP mtu
 	reserved       byte
 	RMBDMAAddr     uint64 // RMB virtual address
@@ -150,7 +150,7 @@ func (ac *AcceptSMCR) Parse(buf []byte) {
 	buf = buf[4:]
 
 	// 1 byte bitfield: rmbe size (4 bits) and qp mtu (4 bits)
-	ac.RMBESize = rmbeSize((uint8(buf[0]) & 0b11110000) >> 4)
+	ac.RMBESize = RMBESize((uint8(buf[0]) & 0b11110000) >> 4)
 	ac.QPMTU = QPMTU(uint8(buf[0]) & 0b00001111)
 	buf = buf[1:]
 
