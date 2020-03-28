@@ -13,14 +13,14 @@ const (
 	SMCDIPAreaOffset = 40
 )
 
-// ipv6Prefix stores a SMC IPv6 Prefix
-type ipv6Prefix struct {
+// IPv6Prefix stores a SMC IPv6 Prefix
+type IPv6Prefix struct {
 	prefix    net.IP
 	prefixLen uint8
 }
 
 // String converts ipv6Prefix to a string
-func (p ipv6Prefix) String() string {
+func (p IPv6Prefix) String() string {
 	return fmt.Sprintf("%s/%d", p.prefix, p.prefixLen)
 }
 
@@ -42,7 +42,7 @@ type Proposal struct {
 	PrefixLen       uint8  // number of significant bits in mask
 	reserved2       [2]byte
 	IPv6PrefixesCnt uint8 // number of IPv6 prefixes in prefix array
-	IPv6Prefixes    []ipv6Prefix
+	IPv6Prefixes    []IPv6Prefix
 
 	trailer
 }
@@ -187,7 +187,7 @@ func (p *Proposal) Parse(buf []byte) {
 			break
 		}
 		// create new ipv6 prefix entry
-		ip6prefix := ipv6Prefix{}
+		ip6prefix := IPv6Prefix{}
 
 		// parse prefix and fill prefix entry
 		ip6prefix.prefix = make(net.IP, net.IPv6len)
