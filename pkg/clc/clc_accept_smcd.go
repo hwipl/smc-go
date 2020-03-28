@@ -12,7 +12,7 @@ const (
 
 // AcceptSMCD stores a CLC SMC-D Accept message
 type AcceptSMCD struct {
-	raw
+	Raw
 	Header
 	GID       uint64   // Sender GID
 	Token     uint64   // DMB token
@@ -55,7 +55,7 @@ func (ac *AcceptSMCD) Reserved() string {
 // Parse parses the SMC-D Accept message in buf
 func (ac *AcceptSMCD) Parse(buf []byte) {
 	// save raw message bytes
-	ac.raw.Parse(buf)
+	ac.Raw.Parse(buf)
 
 	// parse clc header
 	ac.Header.Parse(buf)

@@ -42,7 +42,7 @@ func (m QPMTU) String() string {
 
 // AcceptSMCR stores a CLC SMC-R Accept message
 type AcceptSMCR struct {
-	raw
+	Raw
 	Header
 	SenderPeerID   PeerID           // unique system id
 	IBGID          net.IP           // gid of ib_device port
@@ -98,7 +98,7 @@ func (ac *AcceptSMCR) Reserved() string {
 // Parse parses the SMC-R Accept message in buf
 func (ac *AcceptSMCR) Parse(buf []byte) {
 	// save raw message bytes
-	ac.raw.Parse(buf)
+	ac.Raw.Parse(buf)
 
 	// parse CLC header
 	ac.Header.Parse(buf)

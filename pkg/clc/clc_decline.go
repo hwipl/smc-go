@@ -95,7 +95,7 @@ func (p PeerDiagnosis) String() string {
 
 // Decline stores a CLC Decline message
 type Decline struct {
-	raw
+	Raw
 	Header
 	SenderPeerID  PeerID        // sender peer id
 	PeerDiagnosis PeerDiagnosis // diagnosis information
@@ -130,7 +130,7 @@ func (d *Decline) Reserved() string {
 // Parse parses the CLC Decline in buf
 func (d *Decline) Parse(buf []byte) {
 	// save raw message bytes
-	d.raw.Parse(buf)
+	d.Raw.Parse(buf)
 
 	// parse CLC header
 	d.Header.Parse(buf)

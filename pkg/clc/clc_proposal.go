@@ -26,7 +26,7 @@ func (p IPv6Prefix) String() string {
 
 // Proposal stores a CLC Proposal message
 type Proposal struct {
-	raw
+	Raw
 	Header
 	SenderPeerID PeerID           // unique system id
 	IBGID        net.IP           // gid of ib_device port
@@ -104,7 +104,7 @@ func (p *Proposal) Reserved() string {
 // Parse parses the CLC Proposal message in buf
 func (p *Proposal) Parse(buf []byte) {
 	// save raw message bytes
-	p.raw.Parse(buf)
+	p.Raw.Parse(buf)
 
 	// parse CLC header
 	p.Header.Parse(buf)
