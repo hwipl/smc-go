@@ -41,7 +41,7 @@ func NewMessage(buf []byte) (Message, uint16) {
 	path := path(buf[7] & 0b00000011)
 	switch typ {
 	case typeProposal:
-		return &proposal{}, length
+		return &Proposal{}, length
 	case typeAccept:
 		// check path to determine if it's smc-r or smc-d
 		switch path {

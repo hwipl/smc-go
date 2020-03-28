@@ -8,9 +8,9 @@ import (
 )
 
 const (
-	proposalLen      = 52 // minimum length
-	ipv6PrefixLen    = 17
-	smcdIPAreaOffset = 40
+	ProposalLen      = 52 // minimum length
+	IPv6PrefixLen    = 17
+	SMCDIPAreaOffset = 40
 )
 
 // ipv6Prefix stores a SMC IPv6 Prefix
@@ -24,85 +24,85 @@ func (p ipv6Prefix) String() string {
 	return fmt.Sprintf("%s/%d", p.prefix, p.prefixLen)
 }
 
-// proposal stores a CLC Proposal message
-type proposal struct {
+// Proposal stores a CLC Proposal message
+type Proposal struct {
 	raw
 	header
-	senderPeerID peerID           // unique system id
-	ibGID        net.IP           // gid of ib_device port
-	ibMAC        net.HardwareAddr // mac of ib_device port
-	ipAreaOffset uint16           // offset to IP address info area
+	SenderPeerID peerID           // unique system id
+	IBGID        net.IP           // gid of ib_device port
+	IBMAC        net.HardwareAddr // mac of ib_device port
+	IPAreaOffset uint16           // offset to IP address info area
 
 	// Optional SMC-D info
-	smcdGID  uint64 // ISM GID of requestor
+	SMCDGID  uint64 // ISM GID of requestor
 	reserved [32]byte
 
-	// IP/prefix info
-	prefix          net.IP // subnet mask (rather prefix)
-	prefixLen       uint8  // number of significant bits in mask
+	// IP/Prefix info
+	Prefix          net.IP // subnet mask (rather prefix)
+	PrefixLen       uint8  // number of significant bits in mask
 	reserved2       [2]byte
-	ipv6PrefixesCnt uint8 // number of IPv6 prefixes in prefix array
-	ipv6Prefixes    []ipv6Prefix
+	IPv6PrefixesCnt uint8 // number of IPv6 prefixes in prefix array
+	IPv6Prefixes    []ipv6Prefix
 
 	trailer
 }
 
 // String converts the CLC Proposal message to a string
-func (p *proposal) String() string {
+func (p *Proposal) String() string {
 	if p == nil {
 		return "n/a"
 	}
 
 	// smc-d info
 	smcdInfo := ""
-	if p.ipAreaOffset == smcdIPAreaOffset {
-		smcdInfo = fmt.Sprintf("SMC-D GID: %d, ", p.smcdGID)
+	if p.IPAreaOffset == SMCDIPAreaOffset {
+		smcdInfo = fmt.Sprintf("SMC-D GID: %d, ", p.SMCDGID)
 	}
 
 	// ipv6 prefixes
 	ipv6Prefixes := ""
-	for _, prefix := range p.ipv6Prefixes {
+	for _, prefix := range p.IPv6Prefixes {
 		ipv6Prefixes += fmt.Sprintf(", IPv6 Prefix: %s", prefix)
 	}
 
 	proposalFmt := "%s, Peer ID: %s, SMC-R GID: %s, RoCE MAC: %s, " +
 		"IP Area Offset: %d, %sIPv4 Prefix: %s/%d, " +
 		"IPv6 Prefix Count: %d%s, Trailer: %s"
-	return fmt.Sprintf(proposalFmt, p.header.String(), p.senderPeerID,
-		p.ibGID, p.ibMAC, p.ipAreaOffset, smcdInfo, p.prefix,
-		p.prefixLen, p.ipv6PrefixesCnt, ipv6Prefixes, p.trailer)
+	return fmt.Sprintf(proposalFmt, p.header.String(), p.SenderPeerID,
+		p.IBGID, p.IBMAC, p.IPAreaOffset, smcdInfo, p.Prefix,
+		p.PrefixLen, p.IPv6PrefixesCnt, ipv6Prefixes, p.trailer)
 }
 
 // Reserved converts the CLC Proposal message to a string including reserved
 // message fields
-func (p *proposal) Reserved() string {
+func (p *Proposal) Reserved() string {
 	if p == nil {
 		return "n/a"
 	}
 
 	// smc-d info
 	smcdInfo := ""
-	if p.ipAreaOffset == smcdIPAreaOffset {
+	if p.IPAreaOffset == SMCDIPAreaOffset {
 		smcdInfo = fmt.Sprintf("SMC-D GID: %d, Reserved: %#x, ",
-			p.smcdGID, p.reserved)
+			p.SMCDGID, p.reserved)
 	}
 	// ipv6 prefixes
 	ipv6Prefixes := ""
-	for _, prefix := range p.ipv6Prefixes {
+	for _, prefix := range p.IPv6Prefixes {
 		ipv6Prefixes += fmt.Sprintf(", IPv6 Prefix: %s", prefix)
 	}
 
 	proposalFmt := "%s, Peer ID: %s, SMC-R GID: %s, RoCE MAC: %s, " +
 		"IP Area Offset: %d, %sIPv4 Prefix: %s/%d, Reserved: %#x, " +
 		"IPv6 Prefix Count: %d%s, Trailer: %s"
-	return fmt.Sprintf(proposalFmt, p.header.Reserved(), p.senderPeerID,
-		p.ibGID, p.ibMAC, p.ipAreaOffset, smcdInfo, p.prefix,
-		p.prefixLen, p.reserved2, p.ipv6PrefixesCnt, ipv6Prefixes,
+	return fmt.Sprintf(proposalFmt, p.header.Reserved(), p.SenderPeerID,
+		p.IBGID, p.IBMAC, p.IPAreaOffset, smcdInfo, p.Prefix,
+		p.PrefixLen, p.reserved2, p.IPv6PrefixesCnt, ipv6Prefixes,
 		p.trailer)
 }
 
 // Parse parses the CLC Proposal message in buf
-func (p *proposal) Parse(buf []byte) {
+func (p *Proposal) Parse(buf []byte) {
 	// save raw message bytes
 	p.raw.Parse(buf)
 
@@ -110,7 +110,7 @@ func (p *proposal) Parse(buf []byte) {
 	p.header.Parse(buf)
 
 	// check if message is long enough
-	if p.Length < proposalLen {
+	if p.Length < ProposalLen {
 		log.Println("Error parsing CLC Proposal: message too short")
 		errDump(buf[:p.Length])
 		return
@@ -120,34 +120,34 @@ func (p *proposal) Parse(buf []byte) {
 	skip := HeaderLen
 
 	// sender peer ID
-	copy(p.senderPeerID[:], buf[skip:skip+peerIDLen])
+	copy(p.SenderPeerID[:], buf[skip:skip+peerIDLen])
 	skip += peerIDLen
 
 	// ib GID is an IPv6 address
-	p.ibGID = make(net.IP, net.IPv6len)
-	copy(p.ibGID[:], buf[skip:skip+net.IPv6len])
+	p.IBGID = make(net.IP, net.IPv6len)
+	copy(p.IBGID[:], buf[skip:skip+net.IPv6len])
 	skip += net.IPv6len
 
 	// ib MAC is a 6 byte MAC address
-	p.ibMAC = make(net.HardwareAddr, 6)
-	copy(p.ibMAC[:], buf[skip:skip+6])
+	p.IBMAC = make(net.HardwareAddr, 6)
+	copy(p.IBMAC[:], buf[skip:skip+6])
 	skip += 6
 
 	// offset to ip area
-	p.ipAreaOffset = binary.BigEndian.Uint16(buf[skip : skip+2])
+	p.IPAreaOffset = binary.BigEndian.Uint16(buf[skip : skip+2])
 	skip += 2
 
 	// Optional SMC-D info
-	if p.ipAreaOffset == smcdIPAreaOffset {
+	if p.IPAreaOffset == SMCDIPAreaOffset {
 		// smcd GID
-		p.smcdGID = binary.BigEndian.Uint64(buf[skip : skip+8])
+		p.SMCDGID = binary.BigEndian.Uint64(buf[skip : skip+8])
 		skip += 8
 
 		// reserved
 		copy(p.reserved[:], buf[skip:skip+32])
 		skip += 32
 	} else {
-		skip += int(p.ipAreaOffset)
+		skip += int(p.IPAreaOffset)
 	}
 
 	// make sure we do not read outside the message
@@ -159,12 +159,12 @@ func (p *proposal) Parse(buf []byte) {
 	}
 
 	// IP/prefix is an IPv4 address
-	p.prefix = make(net.IP, net.IPv4len)
-	copy(p.prefix[:], buf[skip:skip+net.IPv4len])
+	p.Prefix = make(net.IP, net.IPv4len)
+	copy(p.Prefix[:], buf[skip:skip+net.IPv4len])
 	skip += net.IPv4len
 
 	// prefix length
-	p.prefixLen = uint8(buf[skip])
+	p.PrefixLen = uint8(buf[skip])
 	skip++
 
 	// reserved
@@ -172,15 +172,15 @@ func (p *proposal) Parse(buf []byte) {
 	skip += 2
 
 	// ipv6 prefix count
-	p.ipv6PrefixesCnt = uint8(buf[skip])
+	p.IPv6PrefixesCnt = uint8(buf[skip])
 
 	// parse ipv6 prefixes
-	for i := uint8(0); i < p.ipv6PrefixesCnt; i++ {
+	for i := uint8(0); i < p.IPv6PrefixesCnt; i++ {
 		// skip prefix count or last prefix length
 		skip++
 
 		// make sure we are still inside the clc message
-		if int(p.Length)-skip < ipv6PrefixLen+trailerLen {
+		if int(p.Length)-skip < IPv6PrefixLen+trailerLen {
 			log.Println("Error parsing CLC Proposal: " +
 				"IPv6 prefix count too big")
 			errDump(buf[:p.Length])
@@ -198,7 +198,7 @@ func (p *proposal) Parse(buf []byte) {
 		ip6prefix.prefixLen = uint8(buf[skip])
 
 		// add to ipv6 prefixes
-		p.ipv6Prefixes = append(p.ipv6Prefixes, ip6prefix)
+		p.IPv6Prefixes = append(p.IPv6Prefixes, ip6prefix)
 	}
 
 	// save trailer
