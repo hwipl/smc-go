@@ -7,39 +7,39 @@ import (
 )
 
 const (
-	acceptSMCDLen = 48
+	AcceptSMCDLen = 48
 )
 
-// acceptSMCD stores a CLC SMC-D Accept message
-type acceptSMCD struct {
+// AcceptSMCD stores a CLC SMC-D Accept message
+type AcceptSMCD struct {
 	raw
 	header
-	smcdGID   uint64   // Sender GID
-	smcdToken uint64   // DMB token
-	dmbeIdx   uint8    // DMBE index
-	dmbeSize  rmbeSize // 4 bits buf size (compressed)
+	GID       uint64   // Sender GID
+	Token     uint64   // DMB token
+	DMBEIdx   uint8    // DMBE index
+	DMBESize  rmbeSize // 4 bits buf size (compressed)
 	reserved  byte     // 4 bits reserved
 	reserved2 [2]byte
-	linkid    uint32 // Link identifier
+	LinkID    uint32 // Link identifier
 	reserved3 [12]byte
 	trailer
 }
 
 // String converts the CLC SMC-D Accept message to a string
-func (ac *acceptSMCD) String() string {
+func (ac *AcceptSMCD) String() string {
 	if ac == nil {
 		return "n/a"
 	}
 
 	acFmt := "%s, SMC-D GID: %d, SMC-D Token: %d, DMBE Index: %d, " +
 		"DMBE Size: %s, Link ID: %d, Trailer: %s"
-	return fmt.Sprintf(acFmt, ac.header.String(), ac.smcdGID, ac.smcdToken,
-		ac.dmbeIdx, ac.dmbeSize, ac.linkid, ac.trailer)
+	return fmt.Sprintf(acFmt, ac.header.String(), ac.GID, ac.Token,
+		ac.DMBEIdx, ac.DMBESize, ac.LinkID, ac.trailer)
 }
 
 // Reserved converts the CLC SMC-D Accept message to a string including
 // reserved message fields
-func (ac *acceptSMCD) Reserved() string {
+func (ac *AcceptSMCD) Reserved() string {
 	if ac == nil {
 		return "n/a"
 	}
@@ -47,13 +47,13 @@ func (ac *acceptSMCD) Reserved() string {
 	acFmt := "%s, SMC-D GID: %d, SMC-D Token: %d, DMBE Index: %d, " +
 		"DMBE Size: %s, Reserved: %#x, Reserved: %#x, " +
 		"Link ID: %d, Reserved: %#x, Trailer: %s"
-	return fmt.Sprintf(acFmt, ac.header.Reserved(), ac.smcdGID,
-		ac.smcdToken, ac.dmbeIdx, ac.dmbeSize, ac.reserved,
-		ac.reserved2, ac.linkid, ac.reserved3, ac.trailer)
+	return fmt.Sprintf(acFmt, ac.header.Reserved(), ac.GID,
+		ac.Token, ac.DMBEIdx, ac.DMBESize, ac.reserved,
+		ac.reserved2, ac.LinkID, ac.reserved3, ac.trailer)
 }
 
 // Parse parses the SMC-D Accept message in buf
-func (ac *acceptSMCD) Parse(buf []byte) {
+func (ac *AcceptSMCD) Parse(buf []byte) {
 	// save raw message bytes
 	ac.raw.Parse(buf)
 
@@ -61,7 +61,7 @@ func (ac *acceptSMCD) Parse(buf []byte) {
 	ac.header.Parse(buf)
 
 	// check if message is long enough
-	if ac.Length < acceptSMCDLen {
+	if ac.Length < AcceptSMCDLen {
 		err := "Error parsing CLC Accept: message too short"
 		if ac.typ == typeConfirm {
 			err = "Error parsing CLC Confirm: message too short"
@@ -75,19 +75,19 @@ func (ac *acceptSMCD) Parse(buf []byte) {
 	buf = buf[HeaderLen:]
 
 	// smcd GID
-	ac.smcdGID = binary.BigEndian.Uint64(buf[:8])
+	ac.GID = binary.BigEndian.Uint64(buf[:8])
 	buf = buf[8:]
 
 	// smcd Token
-	ac.smcdToken = binary.BigEndian.Uint64(buf[:8])
+	ac.Token = binary.BigEndian.Uint64(buf[:8])
 	buf = buf[8:]
 
 	// dmbe index
-	ac.dmbeIdx = uint8(buf[0])
+	ac.DMBEIdx = uint8(buf[0])
 	buf = buf[1:]
 
 	// 1 byte bitfield: dmbe size (4 bits), reserved (4 bits)
-	ac.dmbeSize = rmbeSize((uint8(buf[0]) & 0b11110000) >> 4)
+	ac.DMBESize = rmbeSize((uint8(buf[0]) & 0b11110000) >> 4)
 	ac.reserved = buf[0] & 0b00001111
 	buf = buf[1:]
 
@@ -96,7 +96,7 @@ func (ac *acceptSMCD) Parse(buf []byte) {
 	buf = buf[2:]
 
 	// link id
-	ac.linkid = binary.BigEndian.Uint32(buf[:4])
+	ac.LinkID = binary.BigEndian.Uint32(buf[:4])
 	buf = buf[4:]
 
 	// reserved

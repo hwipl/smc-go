@@ -48,7 +48,7 @@ func NewMessage(buf []byte) (Message, uint16) {
 		case smcTypeR:
 			return &acceptSMCR{}, length
 		case smcTypeD:
-			return &acceptSMCD{}, length
+			return &AcceptSMCD{}, length
 		}
 	case typeConfirm:
 		// check path to determine if it's smc-r or smc-d
