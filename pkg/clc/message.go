@@ -54,7 +54,7 @@ func NewMessage(buf []byte) (Message, uint16) {
 		// check path to determine if it's smc-r or smc-d
 		switch path {
 		case smcTypeR:
-			return &confirmSMCR{}, length
+			return &ConfirmSMCR{}, length
 		case smcTypeD:
 			return &ConfirmSMCD{}, length
 		}
