@@ -21,11 +21,11 @@ const (
 	TypeDecline  = 0x04
 )
 
-// msgType stores the type of a CLC message
-type msgType uint8
+// MsgType stores the type of a CLC message
+type MsgType uint8
 
 // String() converts the message type to a string
-func (t msgType) String() string {
+func (t MsgType) String() string {
 	switch t {
 	case TypeProposal:
 		return "Proposal"
@@ -63,7 +63,7 @@ type Header struct {
 	Eyecatcher Eyecatcher
 
 	// type of message: proposal, accept, confirm, decline
-	Type msgType
+	Type MsgType
 
 	// total length of message
 	Length uint16
@@ -81,7 +81,7 @@ func (h *Header) Parse(buf []byte) {
 	copy(h.Eyecatcher[:], buf[:EyecatcherLen])
 
 	// type
-	h.Type = msgType(buf[4])
+	h.Type = MsgType(buf[4])
 
 	// length
 	h.Length = binary.BigEndian.Uint16(buf[5:7])
