@@ -11,11 +11,11 @@ const (
 	AcceptSMCRLen = 68
 )
 
-// qpMTU stores a SMC QP MTU
-type qpMTU uint8
+// QPMTU stores a SMC QP MTU
+type QPMTU uint8
 
 // String converts qpMTU to a string
-func (m qpMTU) String() string {
+func (m QPMTU) String() string {
 	var mtu string
 
 	switch m {
@@ -52,7 +52,7 @@ type AcceptSMCR struct {
 	RMBEIdx        uint8            // Index of RMBE in RMB
 	RMBEAlertToken uint32           // unique connection id
 	RMBESize       rmbeSize         // 4 bits buf size (compressed)
-	QPMTU          qpMTU            // 4 bits QP mtu
+	QPMTU          QPMTU            // 4 bits QP mtu
 	reserved       byte
 	RMBDMAAddr     uint64 // RMB virtual address
 	reserved2      byte
@@ -151,7 +151,7 @@ func (ac *AcceptSMCR) Parse(buf []byte) {
 
 	// 1 byte bitfield: rmbe size (4 bits) and qp mtu (4 bits)
 	ac.RMBESize = rmbeSize((uint8(buf[0]) & 0b11110000) >> 4)
-	ac.QPMTU = qpMTU(uint8(buf[0]) & 0b00001111)
+	ac.QPMTU = QPMTU(uint8(buf[0]) & 0b00001111)
 	buf = buf[1:]
 
 	// reserved
