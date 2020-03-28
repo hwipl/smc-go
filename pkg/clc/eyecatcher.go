@@ -8,14 +8,14 @@ var (
 )
 
 const (
-	eyecatcherLen = 4
+	EyecatcherLen = 4
 )
 
-// eyecatcher stores a SMC eyecatcher
-type eyecatcher [eyecatcherLen]byte
+// Eyecatcher stores a SMC Eyecatcher
+type Eyecatcher [EyecatcherLen]byte
 
 // String converts the eyecatcher to a string
-func (e eyecatcher) String() string {
+func (e Eyecatcher) String() string {
 	if bytes.Compare(e[:], SMCREyecatcher) == 0 {
 		return "SMC-R"
 	}
@@ -25,12 +25,12 @@ func (e eyecatcher) String() string {
 	return "Unknown"
 }
 
-// hasEyecatcher checks if there is a SMC-R or SMC-D eyecatcher in buf
-func hasEyecatcher(buf []byte) bool {
-	if bytes.Compare(buf[:eyecatcherLen], SMCREyecatcher) == 0 {
+// HasEyecatcher checks if there is a SMC-R or SMC-D eyecatcher in buf
+func HasEyecatcher(buf []byte) bool {
+	if bytes.Compare(buf[:EyecatcherLen], SMCREyecatcher) == 0 {
 		return true
 	}
-	if bytes.Compare(buf[:eyecatcherLen], SMCDEyecatcher) == 0 {
+	if bytes.Compare(buf[:EyecatcherLen], SMCDEyecatcher) == 0 {
 		return true
 	}
 	return false

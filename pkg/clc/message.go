@@ -24,7 +24,7 @@ type Message interface {
 // actually using it
 func NewMessage(buf []byte) (Message, uint16) {
 	// check eyecatcher first
-	if !hasEyecatcher(buf) {
+	if !HasEyecatcher(buf) {
 		return nil, 0
 	}
 

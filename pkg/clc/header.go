@@ -60,7 +60,7 @@ func (p path) String() string {
 // header stores the common clc message header
 type header struct {
 	// eyecatcher
-	eyecatcher eyecatcher
+	eyecatcher Eyecatcher
 
 	// type of message: proposal, accept, confirm, decline
 	typ msgType
@@ -78,7 +78,7 @@ type header struct {
 // Parse parses the CLC message header in buf
 func (h *header) Parse(buf []byte) {
 	// eyecatcher
-	copy(h.eyecatcher[:], buf[:eyecatcherLen])
+	copy(h.eyecatcher[:], buf[:EyecatcherLen])
 
 	// type
 	h.typ = msgType(buf[4])
