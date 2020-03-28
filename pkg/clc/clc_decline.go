@@ -35,11 +35,11 @@ const (
 	DeclineErrRegRMB  = 0x09990003 // reg rmb failed
 )
 
-// peerDiagnosis stores the decline diagnosis code in a decline message
-type peerDiagnosis uint32
+// PeerDiagnosis stores the decline diagnosis code in a decline message
+type PeerDiagnosis uint32
 
 // String converts the peerDiagnosis to a string
-func (p peerDiagnosis) String() string {
+func (p PeerDiagnosis) String() string {
 	// parse peer diagnosis code
 	var diag string
 	switch p {
@@ -98,7 +98,7 @@ type Decline struct {
 	raw
 	header
 	SenderPeerID  peerID        // sender peer id
-	PeerDiagnosis peerDiagnosis // diagnosis information
+	PeerDiagnosis PeerDiagnosis // diagnosis information
 	reserved      [4]byte
 	trailer
 }
@@ -150,7 +150,7 @@ func (d *Decline) Parse(buf []byte) {
 	buf = buf[peerIDLen:]
 
 	// peer diagnosis
-	d.PeerDiagnosis = peerDiagnosis(binary.BigEndian.Uint32(buf[:4]))
+	d.PeerDiagnosis = PeerDiagnosis(binary.BigEndian.Uint32(buf[:4]))
 	buf = buf[4:]
 
 	// reserved
