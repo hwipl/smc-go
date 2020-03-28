@@ -93,42 +93,42 @@ func (p peerDiagnosis) String() string {
 	return fmt.Sprintf("%#x (%s)", uint32(p), diag)
 }
 
-// decline stores a CLC Decline message
-type decline struct {
+// Decline stores a CLC Decline message
+type Decline struct {
 	raw
 	header
-	senderPeerID  peerID        // sender peer id
-	peerDiagnosis peerDiagnosis // diagnosis information
+	SenderPeerID  peerID        // sender peer id
+	PeerDiagnosis peerDiagnosis // diagnosis information
 	reserved      [4]byte
 	trailer
 }
 
 // String converts the CLC Decline message to a string
-func (d *decline) String() string {
+func (d *Decline) String() string {
 	if d == nil {
 		return "n/a"
 	}
 
 	declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, Trailer: %s"
-	return fmt.Sprintf(declineFmt, d.header.String(), d.senderPeerID,
-		d.peerDiagnosis, d.trailer)
+	return fmt.Sprintf(declineFmt, d.header.String(), d.SenderPeerID,
+		d.PeerDiagnosis, d.trailer)
 }
 
 // Reserved converts the CLC Decline message to a string including reserved
 // message fields
-func (d *decline) Reserved() string {
+func (d *Decline) Reserved() string {
 	if d == nil {
 		return "n/a"
 	}
 
 	declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, Reserved: %#x, " +
 		"Trailer: %s"
-	return fmt.Sprintf(declineFmt, d.header.Reserved(), d.senderPeerID,
-		d.peerDiagnosis, d.reserved, d.trailer)
+	return fmt.Sprintf(declineFmt, d.header.Reserved(), d.SenderPeerID,
+		d.PeerDiagnosis, d.reserved, d.trailer)
 }
 
 // Parse parses the CLC Decline in buf
-func (d *decline) Parse(buf []byte) {
+func (d *Decline) Parse(buf []byte) {
 	// save raw message bytes
 	d.raw.Parse(buf)
 
@@ -146,11 +146,11 @@ func (d *decline) Parse(buf []byte) {
 	buf = buf[HeaderLen:]
 
 	// sender peer ID
-	copy(d.senderPeerID[:], buf[:peerIDLen])
+	copy(d.SenderPeerID[:], buf[:peerIDLen])
 	buf = buf[peerIDLen:]
 
 	// peer diagnosis
-	d.peerDiagnosis = peerDiagnosis(binary.BigEndian.Uint32(buf[:4]))
+	d.PeerDiagnosis = peerDiagnosis(binary.BigEndian.Uint32(buf[:4]))
 	buf = buf[4:]
 
 	// reserved
