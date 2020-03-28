@@ -28,7 +28,7 @@ func (p IPv6Prefix) String() string {
 type Proposal struct {
 	raw
 	Header
-	SenderPeerID peerID           // unique system id
+	SenderPeerID PeerID           // unique system id
 	IBGID        net.IP           // gid of ib_device port
 	IBMAC        net.HardwareAddr // mac of ib_device port
 	IPAreaOffset uint16           // offset to IP address info area
@@ -120,8 +120,8 @@ func (p *Proposal) Parse(buf []byte) {
 	skip := HeaderLen
 
 	// sender peer ID
-	copy(p.SenderPeerID[:], buf[skip:skip+peerIDLen])
-	skip += peerIDLen
+	copy(p.SenderPeerID[:], buf[skip:skip+PeerIDLen])
+	skip += PeerIDLen
 
 	// ib GID is an IPv6 address
 	p.IBGID = make(net.IP, net.IPv6len)

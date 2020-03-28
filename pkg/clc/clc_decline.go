@@ -97,7 +97,7 @@ func (p PeerDiagnosis) String() string {
 type Decline struct {
 	raw
 	Header
-	SenderPeerID  peerID        // sender peer id
+	SenderPeerID  PeerID        // sender peer id
 	PeerDiagnosis PeerDiagnosis // diagnosis information
 	reserved      [4]byte
 	trailer
@@ -146,8 +146,8 @@ func (d *Decline) Parse(buf []byte) {
 	buf = buf[HeaderLen:]
 
 	// sender peer ID
-	copy(d.SenderPeerID[:], buf[:peerIDLen])
-	buf = buf[peerIDLen:]
+	copy(d.SenderPeerID[:], buf[:PeerIDLen])
+	buf = buf[PeerIDLen:]
 
 	// peer diagnosis
 	d.PeerDiagnosis = PeerDiagnosis(binary.BigEndian.Uint32(buf[:4]))

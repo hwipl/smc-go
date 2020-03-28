@@ -44,7 +44,7 @@ func (m QPMTU) String() string {
 type AcceptSMCR struct {
 	raw
 	Header
-	SenderPeerID   peerID           // unique system id
+	SenderPeerID   PeerID           // unique system id
 	IBGID          net.IP           // gid of ib_device port
 	IBMAC          net.HardwareAddr // mac of ib_device port
 	QPN            int              // QP number
@@ -118,8 +118,8 @@ func (ac *AcceptSMCR) Parse(buf []byte) {
 	buf = buf[HeaderLen:]
 
 	// sender peer ID
-	copy(ac.SenderPeerID[:], buf[:peerIDLen])
-	buf = buf[peerIDLen:]
+	copy(ac.SenderPeerID[:], buf[:PeerIDLen])
+	buf = buf[PeerIDLen:]
 
 	// ib GID is an IPv6 Address
 	ac.IBGID = make(net.IP, net.IPv6len)
