@@ -57,76 +57,76 @@ func (p path) String() string {
 	}
 }
 
-// header stores the common clc message header
-type header struct {
-	// eyecatcher
-	eyecatcher Eyecatcher
+// Header stores the common clc message Header
+type Header struct {
+	// Eyecatcher
+	Eyecatcher Eyecatcher
 
 	// type of message: proposal, accept, confirm, decline
-	typ msgType
+	Type msgType
 
 	// total length of message
 	Length uint16
 
-	// 1 byte bitfield containing version, flag, reserved, path:
-	version  uint8 // (4 bits)
-	flag     uint8 // (1 bit)
+	// 1 byte bitfield containing Version, flag, reserved, path:
+	Version  uint8 // (4 bits)
+	Flag     uint8 // (1 bit)
 	reserved byte  // (1 bit)
-	path     path  // (2 bits)
+	Path     path  // (2 bits)
 }
 
 // Parse parses the CLC message header in buf
-func (h *header) Parse(buf []byte) {
+func (h *Header) Parse(buf []byte) {
 	// eyecatcher
-	copy(h.eyecatcher[:], buf[:EyecatcherLen])
+	copy(h.Eyecatcher[:], buf[:EyecatcherLen])
 
 	// type
-	h.typ = msgType(buf[4])
+	h.Type = msgType(buf[4])
 
 	// length
 	h.Length = binary.BigEndian.Uint16(buf[5:7])
 
 	// 1 byte bitfield: version, flag, reserved, path
 	bitfield := buf[7]
-	h.version = (bitfield & 0b11110000) >> 4
-	h.flag = (bitfield & 0b00001000) >> 3
+	h.Version = (bitfield & 0b11110000) >> 4
+	h.Flag = (bitfield & 0b00001000) >> 3
 	h.reserved = (bitfield & 0b00000100) >> 2
-	h.path = path(bitfield & 0b00000011)
+	h.Path = path(bitfield & 0b00000011)
 }
 
 // flagString() converts the flag bit in the message according to message type
-func (h *header) flagString() string {
-	switch h.typ {
+func (h *Header) flagString() string {
+	switch h.Type {
 	case typeProposal:
-		return fmt.Sprintf("Flag: %d", h.flag)
+		return fmt.Sprintf("Flag: %d", h.Flag)
 	case typeAccept:
-		return fmt.Sprintf("First Contact: %d", h.flag)
+		return fmt.Sprintf("First Contact: %d", h.Flag)
 	case typeConfirm:
-		return fmt.Sprintf("Flag: %d", h.flag)
+		return fmt.Sprintf("Flag: %d", h.Flag)
 	case typeDecline:
-		return fmt.Sprintf("Out of Sync: %d", h.flag)
+		return fmt.Sprintf("Out of Sync: %d", h.Flag)
 	default:
-		return fmt.Sprintf("Flag: %d", h.flag)
+		return fmt.Sprintf("Flag: %d", h.Flag)
 	}
 }
 
 // headerString converts the message header to a string
-func (h *header) String() string {
+func (h *Header) String() string {
 	flg := h.flagString()
 	headerFmt := "%s: Eyecatcher: %s, Type: %d (%s), Length: %d, " +
 		"Version: %d, %s, Path: %s"
-	return fmt.Sprintf(headerFmt, h.typ, h.eyecatcher, h.typ, h.typ,
-		h.Length, h.version, flg, h.path)
+	return fmt.Sprintf(headerFmt, h.Type, h.Eyecatcher, h.Type, h.Type,
+		h.Length, h.Version, flg, h.Path)
 }
 
 // Reserved converts the message header fields to a string including reserved
 // message fields
-func (h *header) Reserved() string {
+func (h *Header) Reserved() string {
 	// construct string
 	flg := h.flagString()
 
 	headerFmt := "%s: Eyecatcher: %s, Type: %d (%s), Length: %d, " +
 		"Version: %d, %s, Reserved: %#x, Path: %s"
-	return fmt.Sprintf(headerFmt, h.typ, h.eyecatcher, h.typ, h.typ,
-		h.Length, h.version, flg, h.reserved, h.path)
+	return fmt.Sprintf(headerFmt, h.Type, h.Eyecatcher, h.Type, h.Type,
+		h.Length, h.Version, flg, h.reserved, h.Path)
 }

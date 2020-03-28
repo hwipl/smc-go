@@ -13,7 +13,7 @@ const (
 // AcceptSMCD stores a CLC SMC-D Accept message
 type AcceptSMCD struct {
 	raw
-	header
+	Header
 	GID       uint64   // Sender GID
 	Token     uint64   // DMB token
 	DMBEIdx   uint8    // DMBE index
@@ -33,7 +33,7 @@ func (ac *AcceptSMCD) String() string {
 
 	acFmt := "%s, SMC-D GID: %d, SMC-D Token: %d, DMBE Index: %d, " +
 		"DMBE Size: %s, Link ID: %d, Trailer: %s"
-	return fmt.Sprintf(acFmt, ac.header.String(), ac.GID, ac.Token,
+	return fmt.Sprintf(acFmt, ac.Header.String(), ac.GID, ac.Token,
 		ac.DMBEIdx, ac.DMBESize, ac.LinkID, ac.trailer)
 }
 
@@ -47,7 +47,7 @@ func (ac *AcceptSMCD) Reserved() string {
 	acFmt := "%s, SMC-D GID: %d, SMC-D Token: %d, DMBE Index: %d, " +
 		"DMBE Size: %s, Reserved: %#x, Reserved: %#x, " +
 		"Link ID: %d, Reserved: %#x, Trailer: %s"
-	return fmt.Sprintf(acFmt, ac.header.Reserved(), ac.GID,
+	return fmt.Sprintf(acFmt, ac.Header.Reserved(), ac.GID,
 		ac.Token, ac.DMBEIdx, ac.DMBESize, ac.reserved,
 		ac.reserved2, ac.LinkID, ac.reserved3, ac.trailer)
 }
@@ -58,12 +58,12 @@ func (ac *AcceptSMCD) Parse(buf []byte) {
 	ac.raw.Parse(buf)
 
 	// parse clc header
-	ac.header.Parse(buf)
+	ac.Header.Parse(buf)
 
 	// check if message is long enough
 	if ac.Length < AcceptSMCDLen {
 		err := "Error parsing CLC Accept: message too short"
-		if ac.typ == typeConfirm {
+		if ac.Type == typeConfirm {
 			err = "Error parsing CLC Confirm: message too short"
 		}
 		log.Println(err)

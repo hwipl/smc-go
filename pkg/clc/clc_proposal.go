@@ -27,7 +27,7 @@ func (p IPv6Prefix) String() string {
 // Proposal stores a CLC Proposal message
 type Proposal struct {
 	raw
-	header
+	Header
 	SenderPeerID peerID           // unique system id
 	IBGID        net.IP           // gid of ib_device port
 	IBMAC        net.HardwareAddr // mac of ib_device port
@@ -68,7 +68,7 @@ func (p *Proposal) String() string {
 	proposalFmt := "%s, Peer ID: %s, SMC-R GID: %s, RoCE MAC: %s, " +
 		"IP Area Offset: %d, %sIPv4 Prefix: %s/%d, " +
 		"IPv6 Prefix Count: %d%s, Trailer: %s"
-	return fmt.Sprintf(proposalFmt, p.header.String(), p.SenderPeerID,
+	return fmt.Sprintf(proposalFmt, p.Header.String(), p.SenderPeerID,
 		p.IBGID, p.IBMAC, p.IPAreaOffset, smcdInfo, p.Prefix,
 		p.PrefixLen, p.IPv6PrefixesCnt, ipv6Prefixes, p.trailer)
 }
@@ -95,7 +95,7 @@ func (p *Proposal) Reserved() string {
 	proposalFmt := "%s, Peer ID: %s, SMC-R GID: %s, RoCE MAC: %s, " +
 		"IP Area Offset: %d, %sIPv4 Prefix: %s/%d, Reserved: %#x, " +
 		"IPv6 Prefix Count: %d%s, Trailer: %s"
-	return fmt.Sprintf(proposalFmt, p.header.Reserved(), p.SenderPeerID,
+	return fmt.Sprintf(proposalFmt, p.Header.Reserved(), p.SenderPeerID,
 		p.IBGID, p.IBMAC, p.IPAreaOffset, smcdInfo, p.Prefix,
 		p.PrefixLen, p.reserved2, p.IPv6PrefixesCnt, ipv6Prefixes,
 		p.trailer)
@@ -107,7 +107,7 @@ func (p *Proposal) Parse(buf []byte) {
 	p.raw.Parse(buf)
 
 	// parse CLC header
-	p.header.Parse(buf)
+	p.Header.Parse(buf)
 
 	// check if message is long enough
 	if p.Length < ProposalLen {

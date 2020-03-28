@@ -43,7 +43,7 @@ func (m QPMTU) String() string {
 // AcceptSMCR stores a CLC SMC-R Accept message
 type AcceptSMCR struct {
 	raw
-	header
+	Header
 	SenderPeerID   peerID           // unique system id
 	IBGID          net.IP           // gid of ib_device port
 	IBMAC          net.HardwareAddr // mac of ib_device port
@@ -71,7 +71,7 @@ func (ac *AcceptSMCR) String() string {
 		"RMBE Alert Token: %d, RMBE Size: %s, QP MTU: %s, " +
 		"RMB Virtual Address: %#x, Packet Sequence Number: %d, " +
 		"Trailer: %s"
-	return fmt.Sprintf(acFmt, ac.header.String(), ac.SenderPeerID,
+	return fmt.Sprintf(acFmt, ac.Header.String(), ac.SenderPeerID,
 		ac.IBGID, ac.IBMAC, ac.QPN, ac.RMBRKey, ac.RMBEIdx,
 		ac.RMBEAlertToken, ac.RMBESize, ac.QPMTU, ac.RMBDMAAddr,
 		ac.PSN, ac.trailer)
@@ -89,7 +89,7 @@ func (ac *AcceptSMCR) Reserved() string {
 		"RMBE Alert Token: %d, RMBE Size: %s, QP MTU: %s, " +
 		"Reserved: %#x, RMB Virtual Address: %#x, " +
 		"Reserved: %#x, Packet Sequence Number: %d, Trailer: %s"
-	return fmt.Sprintf(acFmt, ac.header.Reserved(), ac.SenderPeerID,
+	return fmt.Sprintf(acFmt, ac.Header.Reserved(), ac.SenderPeerID,
 		ac.IBGID, ac.IBMAC, ac.QPN, ac.RMBRKey, ac.RMBEIdx,
 		ac.RMBEAlertToken, ac.RMBESize, ac.QPMTU, ac.reserved,
 		ac.RMBDMAAddr, ac.reserved2, ac.PSN, ac.trailer)
@@ -101,12 +101,12 @@ func (ac *AcceptSMCR) Parse(buf []byte) {
 	ac.raw.Parse(buf)
 
 	// parse CLC header
-	ac.header.Parse(buf)
+	ac.Header.Parse(buf)
 
 	// check if message is long enough
 	if ac.Length < AcceptSMCRLen {
 		err := "Error parsing CLC Accept: message too short"
-		if ac.typ == typeConfirm {
+		if ac.Type == typeConfirm {
 			err = "Error parsing CLC Confirm: message too short"
 		}
 		log.Println(err)

@@ -96,7 +96,7 @@ func (p PeerDiagnosis) String() string {
 // Decline stores a CLC Decline message
 type Decline struct {
 	raw
-	header
+	Header
 	SenderPeerID  peerID        // sender peer id
 	PeerDiagnosis PeerDiagnosis // diagnosis information
 	reserved      [4]byte
@@ -110,7 +110,7 @@ func (d *Decline) String() string {
 	}
 
 	declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, Trailer: %s"
-	return fmt.Sprintf(declineFmt, d.header.String(), d.SenderPeerID,
+	return fmt.Sprintf(declineFmt, d.Header.String(), d.SenderPeerID,
 		d.PeerDiagnosis, d.trailer)
 }
 
@@ -123,7 +123,7 @@ func (d *Decline) Reserved() string {
 
 	declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, Reserved: %#x, " +
 		"Trailer: %s"
-	return fmt.Sprintf(declineFmt, d.header.Reserved(), d.SenderPeerID,
+	return fmt.Sprintf(declineFmt, d.Header.Reserved(), d.SenderPeerID,
 		d.PeerDiagnosis, d.reserved, d.trailer)
 }
 
@@ -133,7 +133,7 @@ func (d *Decline) Parse(buf []byte) {
 	d.raw.Parse(buf)
 
 	// parse CLC header
-	d.header.Parse(buf)
+	d.Header.Parse(buf)
 
 	// check if message is long enough
 	if d.Length < DeclineLen {
