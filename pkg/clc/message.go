@@ -40,25 +40,25 @@ func NewMessage(buf []byte) (Message, uint16) {
 	typ := buf[4]
 	path := path(buf[7] & 0b00000011)
 	switch typ {
-	case typeProposal:
+	case TypeProposal:
 		return &Proposal{}, length
-	case typeAccept:
+	case TypeAccept:
 		// check path to determine if it's smc-r or smc-d
 		switch path {
-		case smcTypeR:
+		case SMCTypeR:
 			return &AcceptSMCR{}, length
-		case smcTypeD:
+		case SMCTypeD:
 			return &AcceptSMCD{}, length
 		}
-	case typeConfirm:
+	case TypeConfirm:
 		// check path to determine if it's smc-r or smc-d
 		switch path {
-		case smcTypeR:
+		case SMCTypeR:
 			return &ConfirmSMCR{}, length
-		case smcTypeD:
+		case SMCTypeD:
 			return &ConfirmSMCD{}, length
 		}
-	case typeDecline:
+	case TypeDecline:
 		return &Decline{}, length
 	}
 

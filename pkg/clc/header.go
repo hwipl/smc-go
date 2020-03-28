@@ -7,18 +7,18 @@ import (
 
 const (
 	// smc type/path
-	smcTypeR = 0 // SMC-R only
-	smcTypeD = 1 // SMC-D only
-	smcTypeB = 3 // SMC-R and SMC-D
+	SMCTypeR = 0 // SMC-R only
+	SMCTypeD = 1 // SMC-D only
+	SMCTypeB = 3 // SMC-R and SMC-D
 
 	// HeaderLen is the length of the clc header in bytes
 	HeaderLen = 8
 
 	// clc message types
-	typeProposal = 0x01
-	typeAccept   = 0x02
-	typeConfirm  = 0x03
-	typeDecline  = 0x04
+	TypeProposal = 0x01
+	TypeAccept   = 0x02
+	TypeConfirm  = 0x03
+	TypeDecline  = 0x04
 )
 
 // msgType stores the type of a CLC message
@@ -27,13 +27,13 @@ type msgType uint8
 // String() converts the message type to a string
 func (t msgType) String() string {
 	switch t {
-	case typeProposal:
+	case TypeProposal:
 		return "Proposal"
-	case typeAccept:
+	case TypeAccept:
 		return "Accept"
-	case typeConfirm:
+	case TypeConfirm:
 		return "Confirm"
-	case typeDecline:
+	case TypeDecline:
 		return "Decline"
 	default:
 		return "Unknown"
@@ -46,11 +46,11 @@ type path uint8
 // String converts the path to a string
 func (p path) String() string {
 	switch p {
-	case smcTypeR:
+	case SMCTypeR:
 		return "SMC-R"
-	case smcTypeD:
+	case SMCTypeD:
 		return "SMC-D"
-	case smcTypeB:
+	case SMCTypeB:
 		return "SMC-R + SMC-D"
 	default:
 		return "unknown"
@@ -97,13 +97,13 @@ func (h *Header) Parse(buf []byte) {
 // flagString() converts the flag bit in the message according to message type
 func (h *Header) flagString() string {
 	switch h.Type {
-	case typeProposal:
+	case TypeProposal:
 		return fmt.Sprintf("Flag: %d", h.Flag)
-	case typeAccept:
+	case TypeAccept:
 		return fmt.Sprintf("First Contact: %d", h.Flag)
-	case typeConfirm:
+	case TypeConfirm:
 		return fmt.Sprintf("Flag: %d", h.Flag)
-	case typeDecline:
+	case TypeDecline:
 		return fmt.Sprintf("Out of Sync: %d", h.Flag)
 	default:
 		return fmt.Sprintf("Flag: %d", h.Flag)
