@@ -7,32 +7,32 @@ import (
 )
 
 const (
-	// declineLen is the length of a clc decline message in bytes
-	declineLen = 28
+	// DeclineLen is the length of a clc decline message in bytes
+	DeclineLen = 28
 
 	// decline diagnosis codes (linux)
-	declineMem        = 0x01010000 // insufficient memory resources
-	declineTimeoutCL  = 0x02010000 // timeout w4 QP confirm link
-	declineTimeoutAL  = 0x02020000 // timeout w4 QP add link
-	declineCnfErr     = 0x03000000 // configuration error
-	declinePeerNoSMC  = 0x03010000 // peer did not indicate SMC
-	declineIPSEC      = 0x03020000 // IPsec usage
-	declineNoSMCDev   = 0x03030000 // no SMC device found (R or D)
-	declineNoSMCDDev  = 0x03030001 // no SMC-D device found
-	declineNoSMCRDev  = 0x03030002 // no SMC-R device found
-	declineSMCDNoTalk = 0x03030003 // SMC-D dev can't talk to peer
-	declineModeUnsupp = 0x03040000 // smc modes do not match (R or D)
-	declineRMBEEyeC   = 0x03050000 // peer has eyecatcher in RMBE
-	declineOptUnsupp  = 0x03060000 // fastopen sockopt not supported
-	declineDiffPrefix = 0x03070000 // IP prefix / subnet mismatch
-	declineGetVLANErr = 0x03080000 // err to get vlan id of ip device
-	declineISMVLANErr = 0x03090000 // err to reg vlan id on ism dev
-	declineSyncErr    = 0x04000000 // synchronization error
-	declinePeerDecl   = 0x05000000 // peer declined during handshake
-	declineInterr     = 0x09990000 // internal error
-	declineErrRTok    = 0x09990001 // rtoken handling failed
-	declineErrRdyLnk  = 0x09990002 // ib ready link failed
-	declineErrRegRMB  = 0x09990003 // reg rmb failed
+	DeclineMem        = 0x01010000 // insufficient memory resources
+	DeclineTimeoutCL  = 0x02010000 // timeout w4 QP confirm link
+	DeclineTimeoutAL  = 0x02020000 // timeout w4 QP add link
+	DeclineCnfErr     = 0x03000000 // configuration error
+	DeclinePeerNoSMC  = 0x03010000 // peer did not indicate SMC
+	DeclineIPSEC      = 0x03020000 // IPsec usage
+	DeclineNoSMCDev   = 0x03030000 // no SMC device found (R or D)
+	DeclineNoSMCDDev  = 0x03030001 // no SMC-D device found
+	DeclineNoSMCRDev  = 0x03030002 // no SMC-R device found
+	DeclineSMCDNoTalk = 0x03030003 // SMC-D dev can't talk to peer
+	DeclineModeUnsupp = 0x03040000 // smc modes do not match (R or D)
+	DeclineRMBEEyeC   = 0x03050000 // peer has eyecatcher in RMBE
+	DeclineOptUnsupp  = 0x03060000 // fastopen sockopt not supported
+	DeclineDiffPrefix = 0x03070000 // IP prefix / subnet mismatch
+	DeclineGetVLANErr = 0x03080000 // err to get vlan id of ip device
+	DeclineISMVLANErr = 0x03090000 // err to reg vlan id on ism dev
+	DeclineSyncErr    = 0x04000000 // synchronization error
+	DeclinePeerDecl   = 0x05000000 // peer declined during handshake
+	DeclineInterr     = 0x09990000 // internal error
+	DeclineErrRTok    = 0x09990001 // rtoken handling failed
+	DeclineErrRdyLnk  = 0x09990002 // ib ready link failed
+	DeclineErrRegRMB  = 0x09990003 // reg rmb failed
 )
 
 // peerDiagnosis stores the decline diagnosis code in a decline message
@@ -43,49 +43,49 @@ func (p peerDiagnosis) String() string {
 	// parse peer diagnosis code
 	var diag string
 	switch p {
-	case declineMem:
+	case DeclineMem:
 		diag = "insufficient memory resources"
-	case declineTimeoutCL:
+	case DeclineTimeoutCL:
 		diag = "timeout w4 QP confirm link"
-	case declineTimeoutAL:
+	case DeclineTimeoutAL:
 		diag = "timeout w4 QP add link"
-	case declineCnfErr:
+	case DeclineCnfErr:
 		diag = "configuration error"
-	case declinePeerNoSMC:
+	case DeclinePeerNoSMC:
 		diag = "peer did not indicate SMC"
-	case declineIPSEC:
+	case DeclineIPSEC:
 		diag = "IPsec usage"
-	case declineNoSMCDev:
+	case DeclineNoSMCDev:
 		diag = "no SMC device found (R or D)"
-	case declineNoSMCDDev:
+	case DeclineNoSMCDDev:
 		diag = "no SMC-D device found"
-	case declineNoSMCRDev:
+	case DeclineNoSMCRDev:
 		diag = "no SMC-R device found"
-	case declineSMCDNoTalk:
+	case DeclineSMCDNoTalk:
 		diag = "SMC-D dev can't talk to peer"
-	case declineModeUnsupp:
+	case DeclineModeUnsupp:
 		diag = "smc modes do not match (R or D)"
-	case declineRMBEEyeC:
+	case DeclineRMBEEyeC:
 		diag = "peer has eyecatcher in RMBE"
-	case declineOptUnsupp:
+	case DeclineOptUnsupp:
 		diag = "fastopen sockopt not supported"
-	case declineDiffPrefix:
+	case DeclineDiffPrefix:
 		diag = "IP prefix / subnet mismatch"
-	case declineGetVLANErr:
+	case DeclineGetVLANErr:
 		diag = "err to get vlan id of ip device"
-	case declineISMVLANErr:
+	case DeclineISMVLANErr:
 		diag = "err to reg vlan id on ism dev"
-	case declineSyncErr:
+	case DeclineSyncErr:
 		diag = "synchronization error"
-	case declinePeerDecl:
+	case DeclinePeerDecl:
 		diag = "peer declined during handshake"
-	case declineInterr:
+	case DeclineInterr:
 		diag = "internal error"
-	case declineErrRTok:
+	case DeclineErrRTok:
 		diag = "rtoken handling failed"
-	case declineErrRdyLnk:
+	case DeclineErrRdyLnk:
 		diag = "ib ready link failed"
-	case declineErrRegRMB:
+	case DeclineErrRegRMB:
 		diag = "reg rmb failed"
 	default:
 		diag = "Unknown"
@@ -136,7 +136,7 @@ func (d *Decline) Parse(buf []byte) {
 	d.header.Parse(buf)
 
 	// check if message is long enough
-	if d.Length < declineLen {
+	if d.Length < DeclineLen {
 		log.Println("Error parsing CLC Decline: message too short")
 		errDump(buf[:d.Length])
 		return
