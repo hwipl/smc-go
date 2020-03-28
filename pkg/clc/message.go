@@ -38,7 +38,7 @@ func NewMessage(buf []byte) (Message, uint16) {
 
 	// return new (empty) message of correct type
 	typ := buf[4]
-	path := path(buf[7] & 0b00000011)
+	path := Path(buf[7] & 0b00000011)
 	switch typ {
 	case TypeProposal:
 		return &Proposal{}, length

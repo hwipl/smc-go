@@ -40,11 +40,11 @@ func (t MsgType) String() string {
 	}
 }
 
-// path stores an SMC path
-type path uint8
+// Path stores an SMC Path
+type Path uint8
 
 // String converts the path to a string
-func (p path) String() string {
+func (p Path) String() string {
 	switch p {
 	case SMCTypeR:
 		return "SMC-R"
@@ -72,7 +72,7 @@ type Header struct {
 	Version  uint8 // (4 bits)
 	Flag     uint8 // (1 bit)
 	reserved byte  // (1 bit)
-	Path     path  // (2 bits)
+	Path     Path  // (2 bits)
 }
 
 // Parse parses the CLC message header in buf
@@ -91,7 +91,7 @@ func (h *Header) Parse(buf []byte) {
 	h.Version = (bitfield & 0b11110000) >> 4
 	h.Flag = (bitfield & 0b00001000) >> 3
 	h.reserved = (bitfield & 0b00000100) >> 2
-	h.Path = path(bitfield & 0b00000011)
+	h.Path = Path(bitfield & 0b00000011)
 }
 
 // flagString() converts the flag bit in the message according to message type
