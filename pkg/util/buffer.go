@@ -5,21 +5,21 @@ import (
 	"sync"
 )
 
-// buffer is a bytes.Buffer protected by a mutex
-type buffer struct {
+// Buffer is a bytes.Buffer protected by a mutex
+type Buffer struct {
 	lock   sync.Mutex
 	buffer bytes.Buffer
 }
 
 // Write writes p to the buffer
-func (b *buffer) Write(p []byte) (n int, err error) {
+func (b *Buffer) Write(p []byte) (n int, err error) {
 	b.lock.Lock()
 	defer b.lock.Unlock()
 	return b.buffer.Write(p)
 }
 
-// copyBuffer copies the underlying bytes.Buffer and returns it
-func (b *buffer) copyBuffer() *bytes.Buffer {
+// CopyBuffer copies the underlying bytes.Buffer and returns it
+func (b *Buffer) CopyBuffer() *bytes.Buffer {
 	b.lock.Lock()
 	defer b.lock.Unlock()
 	oldBuf := b.buffer.Bytes()
@@ -28,8 +28,8 @@ func (b *buffer) copyBuffer() *bytes.Buffer {
 	return bytes.NewBuffer(newBuf)
 }
 
-// reset removes everything from the underlying bytes.Buffer
-func (b *buffer) reset() {
+// Reset removes everything from the underlying bytes.Buffer
+func (b *Buffer) Reset() {
 	b.lock.Lock()
 	defer b.lock.Unlock()
 	b.buffer = bytes.Buffer{}
