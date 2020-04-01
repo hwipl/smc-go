@@ -30,9 +30,9 @@ func printHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// startHTTPOutput starts a http server that listens on address, and returns
+// StartHTTPOutput starts a http server that listens on address, and returns
 // HTTPOutput that contains the output Buffer and Listener
-func startHTTPOutput(address string) *HTTPOutput {
+func StartHTTPOutput(address string) *HTTPOutput {
 	// create listener
 	listener, err := net.Listen("tcp", address)
 	if err != nil {

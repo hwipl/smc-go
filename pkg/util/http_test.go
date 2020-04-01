@@ -26,7 +26,7 @@ func TestPrintHTTP(t *testing.T) {
 	var want, got, url string
 
 	// create custom listener with random port
-	h := startHTTPOutput(":0")
+	h := StartHTTPOutput(":0")
 	if h != &httpOutput {
 		t.Errorf("got unequal; want equal")
 	}
