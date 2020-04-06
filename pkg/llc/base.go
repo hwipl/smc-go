@@ -2,21 +2,21 @@ package llc
 
 import "encoding/hex"
 
-// baseMsg stores common message fields
-type baseMsg struct {
+// BaseMsg stores common message fields
+type BaseMsg struct {
 	Raw    []byte
 	Type   int
 	Length int
 }
 
 // setRaw stores raw message bytes in the message
-func (b *baseMsg) setRaw(buffer []byte) {
+func (b *BaseMsg) setRaw(buffer []byte) {
 	b.Raw = make([]byte, len(buffer))
 	copy(b.Raw[:], buffer[:])
 }
 
 // SetBaseMsg initializes base message from buffer
-func (b *baseMsg) SetBaseMsg(buffer []byte) {
+func (b *BaseMsg) SetBaseMsg(buffer []byte) {
 	// save raw message bytes
 	b.setRaw(buffer)
 
@@ -29,11 +29,11 @@ func (b *baseMsg) SetBaseMsg(buffer []byte) {
 }
 
 // Hex converts the message to a hex dump string
-func (b *baseMsg) Hex() string {
+func (b *BaseMsg) Hex() string {
 	return hex.Dump(b.Raw)
 }
 
 // GetType returns the type of the message
-func (b *baseMsg) GetType() int {
+func (b *BaseMsg) GetType() int {
 	return b.Type
 }

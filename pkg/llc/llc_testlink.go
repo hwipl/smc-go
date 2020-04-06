@@ -4,7 +4,7 @@ import "fmt"
 
 // testLink stores a LLC test link message
 type testLink struct {
-	baseMsg
+	BaseMsg
 	res1     byte
 	reply    bool
 	res2     byte

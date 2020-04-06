@@ -8,7 +8,7 @@ import (
 
 // confirmLink stores a LLC confirm message
 type confirmLink struct {
-	baseMsg
+	BaseMsg
 	res1             byte
 	reply            bool
 	res2             byte

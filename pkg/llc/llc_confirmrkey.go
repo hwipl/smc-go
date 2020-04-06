@@ -31,7 +31,7 @@ func (r *rmbSpec) String() string {
 
 // confirmRKey stores a LLC confirm RKey message
 type confirmRKey struct {
-	baseMsg
+	BaseMsg
 	res1      byte
 	reply     bool
 	res2      byte

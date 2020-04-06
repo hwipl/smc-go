@@ -38,7 +38,7 @@ func (d delLinkRsnCode) String() string {
 
 // delteLink stores a LLC delete link message
 type deleteLink struct {
-	baseMsg
+	BaseMsg
 	res1    byte
 	reply   bool
 	all     bool

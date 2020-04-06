@@ -7,7 +7,7 @@ const (
 
 // other stores an other message
 type other struct {
-	baseMsg
+	BaseMsg
 }
 
 // Parse fills the other fields from the other message in buffer

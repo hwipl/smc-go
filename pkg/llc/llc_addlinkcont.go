@@ -31,7 +31,7 @@ func (r *rkeyPair) String() string {
 
 // addLinkCont stores a LLC add link continuation message
 type addLinkCont struct {
-	baseMsg
+	BaseMsg
 	res1       byte
 	reply      bool
 	res2       byte

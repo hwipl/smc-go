@@ -4,7 +4,7 @@ import "fmt"
 
 // confirmRKeyCont stores a LLC confirm rkey continuation message
 type confirmRKeyCont struct {
-	baseMsg
+	BaseMsg
 	res1      byte
 	reply     bool
 	res2      byte

@@ -7,7 +7,7 @@ import (
 
 // deleteRKey stores a LLC delete RKey message
 type deleteRKey struct {
-	baseMsg
+	BaseMsg
 	res1      byte
 	reply     bool
 	res2      byte

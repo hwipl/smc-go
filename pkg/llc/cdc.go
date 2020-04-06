@@ -7,7 +7,7 @@ import (
 
 // cdc stores a CDC message
 type cdc struct {
-	baseMsg
+	BaseMsg
 	seqNum   uint16
 	alertTkn uint32
 	res1     [2]byte

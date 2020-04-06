@@ -52,7 +52,7 @@ func (r addLinkRsnCode) String() string {
 
 // addLink stores a LLC add link message
 type addLink struct {
-	baseMsg
+	BaseMsg
 	res1      byte
 	rsnCode   addLinkRsnCode
 	reply     bool
