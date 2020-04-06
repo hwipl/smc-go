@@ -5,12 +5,12 @@ import (
 	"net"
 )
 
-// qpMTU stores the compressed MTU of a QP, taken from smc-clc
-type qpMTU uint8
+// QPMTU stores the compressed MTU of a QP, taken from smc-clc
+type QPMTU uint8
 
 // String converts qpMTU to a string including the uncompressed MTU, taken from
 // smc-clc
-func (m qpMTU) String() string {
+func (m QPMTU) String() string {
 	var mtu string
 
 	switch m {
@@ -64,7 +64,7 @@ type addLink struct {
 	senderQP  uint32
 	link      uint8
 	res3      byte
-	mtu       qpMTU
+	mtu       QPMTU
 	psn       uint32
 	res4      [10]byte
 }
@@ -121,7 +121,7 @@ func (a *addLink) Parse(buffer []byte) {
 	a.res3 = buffer[0] >> 4
 
 	// MTU are the last 4 bits in this byte
-	a.mtu = qpMTU(buffer[0] & 0b00001111)
+	a.mtu = QPMTU(buffer[0] & 0b00001111)
 	buffer = buffer[1:]
 
 	// initial Packet Sequence Number is 3 bytes
