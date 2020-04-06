@@ -50,27 +50,27 @@ func (r AddLinkRsnCode) String() string {
 	return fmt.Sprintf("%d (%s)", r, rsn)
 }
 
-// addLink stores a LLC add link message
-type addLink struct {
+// AddLink stores a LLC add link message
+type AddLink struct {
 	BaseMsg
 	res1      byte
-	rsnCode   AddLinkRsnCode
-	reply     bool
-	reject    bool
+	RsnCode   AddLinkRsnCode
+	Reply     bool
+	Reject    bool
 	res2      byte
-	senderMAC net.HardwareAddr
+	SenderMAC net.HardwareAddr
 	res5      [2]byte // not in the RFC
-	senderGID net.IP
-	senderQP  uint32
-	link      uint8
+	SenderGID net.IP
+	SenderQP  uint32
+	Link      uint8
 	res3      byte
-	mtu       QPMTU
-	psn       uint32
+	MTU       QPMTU
+	PSN       uint32
 	res4      [10]byte
 }
 
 // Parse fills the addLink fields from the LLC add link message in buffer
-func (a *addLink) Parse(buffer []byte) {
+func (a *AddLink) Parse(buffer []byte) {
 	// init base message fields
 	a.SetBaseMsg(buffer)
 	buffer = buffer[2:]
@@ -79,22 +79,22 @@ func (a *addLink) Parse(buffer []byte) {
 	a.res1 = buffer[0] >> 4
 
 	// Reason Code are the last 4 bits in this byte
-	a.rsnCode = AddLinkRsnCode(buffer[0] & 0b00001111)
+	a.RsnCode = AddLinkRsnCode(buffer[0] & 0b00001111)
 	buffer = buffer[1:]
 
 	// Reply flag is the first bit in this byte
-	a.reply = (buffer[0] & 0b10000000) > 0
+	a.Reply = (buffer[0] & 0b10000000) > 0
 
 	// Rejection flag is the next bit in this byte
-	a.reject = (buffer[0] & 0b01000000) > 0
+	a.Reject = (buffer[0] & 0b01000000) > 0
 
 	// Reserved are the last 6 bits in this byte
 	a.res2 = buffer[0] & 0b00111111
 	buffer = buffer[1:]
 
 	// sender MAC is a 6 byte MAC address
-	a.senderMAC = make(net.HardwareAddr, 6)
-	copy(a.senderMAC[:], buffer[0:6])
+	a.SenderMAC = make(net.HardwareAddr, 6)
+	copy(a.SenderMAC[:], buffer[0:6])
 	buffer = buffer[6:]
 
 	// in the linux code, there are 2 more reserved bytes here that are not
@@ -103,31 +103,31 @@ func (a *addLink) Parse(buffer []byte) {
 	buffer = buffer[2:]
 
 	// sender GID is an 16 bytes IPv6 address
-	a.senderGID = make(net.IP, net.IPv6len)
-	copy(a.senderGID[:], buffer[0:16])
+	a.SenderGID = make(net.IP, net.IPv6len)
+	copy(a.SenderGID[:], buffer[0:16])
 	buffer = buffer[16:]
 
 	// QP number is 3 bytes
-	a.senderQP = uint32(buffer[0]) << 16
-	a.senderQP |= uint32(buffer[1]) << 8
-	a.senderQP |= uint32(buffer[2])
+	a.SenderQP = uint32(buffer[0]) << 16
+	a.SenderQP |= uint32(buffer[1]) << 8
+	a.SenderQP |= uint32(buffer[2])
 	buffer = buffer[3:]
 
 	// Link is 1 byte
-	a.link = buffer[0]
+	a.Link = buffer[0]
 	buffer = buffer[1:]
 
 	// Reserved are the first 4 bits in this byte
 	a.res3 = buffer[0] >> 4
 
 	// MTU are the last 4 bits in this byte
-	a.mtu = QPMTU(buffer[0] & 0b00001111)
+	a.MTU = QPMTU(buffer[0] & 0b00001111)
 	buffer = buffer[1:]
 
 	// initial Packet Sequence Number is 3 bytes
-	a.psn = uint32(buffer[0]) << 16
-	a.psn |= uint32(buffer[1]) << 8
-	a.psn |= uint32(buffer[2])
+	a.PSN = uint32(buffer[0]) << 16
+	a.PSN |= uint32(buffer[1]) << 8
+	a.PSN |= uint32(buffer[2])
 	buffer = buffer[3:]
 
 	// Rest of message is reserved
@@ -135,29 +135,29 @@ func (a *addLink) Parse(buffer []byte) {
 }
 
 // String converts the LLC add link message to string
-func (a *addLink) String() string {
+func (a *AddLink) String() string {
 	aFmt := "LLC Add Link: Type: %d, Length: %d, Reason Code: %s, " +
 		"Reply: %t, Rejection: %t, Sender MAC: %s, Sender GID: %s, " +
 		"Sender QP: %d, Link: %d, MTU: %s, Initial PSN: %d\n"
-	return fmt.Sprintf(aFmt, a.Type, a.Length, a.rsnCode, a.reply, a.reject,
-		a.senderMAC, a.senderGID, a.senderQP, a.link, a.mtu, a.psn)
+	return fmt.Sprintf(aFmt, a.Type, a.Length, a.RsnCode, a.Reply, a.Reject,
+		a.SenderMAC, a.SenderGID, a.SenderQP, a.Link, a.MTU, a.PSN)
 }
 
 // Reserved converts the LLC add link message to string including reserved
 // fields
-func (a *addLink) Reserved() string {
+func (a *AddLink) Reserved() string {
 	aFmt := "LLC Add Link: Type: %d, Length: %d, Reserved: %#x, " +
 		"Reason Code: %s, Reply: %t, Rejection: %t, Reserved: %#x, " +
 		"Sender MAC: %s, Sender GID: %s, Sender QP: %d, Link: %d, " +
 		"Reserved: %#x, MTU: %s, Initial PSN: %d, Reserved: %#x\n"
-	return fmt.Sprintf(aFmt, a.Type, a.Length, a.res1, a.rsnCode, a.reply,
-		a.reject, a.res2, a.senderMAC, a.senderGID, a.senderQP, a.link,
-		a.res3, a.mtu, a.psn, a.res4)
+	return fmt.Sprintf(aFmt, a.Type, a.Length, a.res1, a.RsnCode, a.Reply,
+		a.Reject, a.res2, a.SenderMAC, a.SenderGID, a.SenderQP, a.Link,
+		a.res3, a.MTU, a.PSN, a.res4)
 }
 
-// parseAddLink parses and prints the LLC add link message in buffer
-func parseAddLink(buffer []byte) *addLink {
-	var add addLink
+// ParseAddLink parses and prints the LLC add link message in buffer
+func ParseAddLink(buffer []byte) *AddLink {
+	var add AddLink
 	add.Parse(buffer)
 	return &add
 }

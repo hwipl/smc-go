@@ -26,7 +26,7 @@ func TestAddLink(t *testing.T) {
 	}
 
 	// parse message
-	a := parseAddLink(bytes)
+	a := ParseAddLink(bytes)
 
 	// test String()
 	want = "LLC Add Link: Type: 2, Length: 44, " +
