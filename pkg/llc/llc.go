@@ -41,7 +41,7 @@ func ParseLLC(buffer []byte) Message {
 	case typeDeleteRKey:
 		return parseDeleteRKey(buffer)
 	case typeTestLink:
-		return parseTestLink(buffer)
+		return ParseTestLink(buffer)
 	case typeCDC:
 		return ParseCDC(buffer)
 	default:
