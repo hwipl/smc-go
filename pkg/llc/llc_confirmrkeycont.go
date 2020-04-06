@@ -11,7 +11,7 @@ type confirmRKeyCont struct {
 	reject    bool // negative response
 	res3      byte
 	numTkns   uint8
-	otherRMBs [3]rmbSpec
+	otherRMBs [3]RMBSpec
 	res4      byte
 }
 
@@ -50,7 +50,7 @@ func (c *confirmRKeyCont) Parse(buffer []byte) {
 	// * second other link rmb (can be all zeros)
 	// * third other link rmb (can be all zeros)
 	for i := range c.otherRMBs {
-		c.otherRMBs[i].parse(buffer)
+		c.otherRMBs[i].Parse(buffer)
 		buffer = buffer[13:]
 	}
 

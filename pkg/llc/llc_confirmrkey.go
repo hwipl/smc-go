@@ -5,28 +5,28 @@ import (
 	"fmt"
 )
 
-// rmbSpec stores another RMB specificiation
-type rmbSpec struct {
-	link  uint8
-	rkey  uint32
-	vaddr uint64
+// RMBSpec stores another RMB specificiation
+type RMBSpec struct {
+	Link  uint8
+	RKey  uint32
+	VAddr uint64
 }
 
-// parse fills the rmbSpec fields from buffer
-func (r *rmbSpec) parse(buffer []byte) {
+// Parse fills the rmbSpec fields from buffer
+func (r *RMBSpec) Parse(buffer []byte) {
 	// other link rmb specifications are 13 bytes and consist of:
 	// * link number (1 byte)
 	// * RMB's RKey for the specified link (4 bytes)
 	// * RMB's virtual address for the specified link (8 bytes)
-	r.link = buffer[0]
-	r.rkey = binary.BigEndian.Uint32(buffer[1:5])
-	r.vaddr = binary.BigEndian.Uint64(buffer[5:13])
+	r.Link = buffer[0]
+	r.RKey = binary.BigEndian.Uint32(buffer[1:5])
+	r.VAddr = binary.BigEndian.Uint64(buffer[5:13])
 }
 
 // String converts the rmbSpec to a string
-func (r *rmbSpec) String() string {
+func (r *RMBSpec) String() string {
 	rFmt := "[Link: %d, RKey: %d, Virtual Address: %#x]"
-	return fmt.Sprintf(rFmt, r.link, r.rkey, r.vaddr)
+	return fmt.Sprintf(rFmt, r.Link, r.RKey, r.VAddr)
 }
 
 // confirmRKey stores a LLC confirm RKey message
@@ -41,7 +41,7 @@ type confirmRKey struct {
 	numTkns   uint8
 	rkey      uint32
 	vaddr     uint64
-	otherRMBs [2]rmbSpec
+	otherRMBs [2]RMBSpec
 	res4      byte
 }
 
@@ -88,7 +88,7 @@ func (c *confirmRKey) Parse(buffer []byte) {
 	// * first other link rmb (can be all zeros)
 	// * second other link rmb (can be all zeros)
 	for i := range c.otherRMBs {
-		c.otherRMBs[i].parse(buffer)
+		c.otherRMBs[i].Parse(buffer)
 		buffer = buffer[13:]
 	}
 
