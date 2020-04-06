@@ -52,7 +52,7 @@ func TestTestLink(t *testing.T) {
 	}
 
 	// test GetType()
-	wantType := typeTestLink
+	wantType := TypeTestLink
 	gotType := tl.GetType()
 	if gotType != wantType {
 		t.Errorf("tl.GetType() = %d; want %d", gotType, wantType)

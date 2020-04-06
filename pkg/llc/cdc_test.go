@@ -66,7 +66,7 @@ func TestCDC(t *testing.T) {
 	}
 
 	// test GetType()
-	wantType := typeCDC
+	wantType := TypeCDC
 	gotType := cdc.GetType()
 	if gotType != wantType {
 		t.Errorf("cdc.GetType() = %d; want %d", gotType, wantType)

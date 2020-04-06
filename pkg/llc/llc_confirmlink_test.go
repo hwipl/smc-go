@@ -59,7 +59,7 @@ func TestConfirmLink(t *testing.T) {
 	}
 
 	// test GetType()
-	wantType := typeConfirmLink
+	wantType := TypeConfirmLink
 	gotType := c.GetType()
 	if gotType != wantType {
 		t.Errorf("c.GetType() = %d; want %d", gotType, wantType)

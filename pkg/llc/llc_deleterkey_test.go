@@ -58,7 +58,7 @@ func TestDeleteRKey(t *testing.T) {
 	}
 
 	// test GetType()
-	wantType := typeDeleteRKey
+	wantType := TypeDeleteRKey
 	gotType := d.GetType()
 	if gotType != wantType {
 		t.Errorf("d.GetType() = %d; want %d", gotType, wantType)

@@ -63,7 +63,7 @@ func TestConfirmRKeyCont(t *testing.T) {
 	}
 
 	// test GetType()
-	wantType := typeConfirmRKeyCont
+	wantType := TypeConfirmRKeyCont
 	gotType := c.GetType()
 	if gotType != wantType {
 		t.Errorf("c.GetType() = %d; want %d", gotType, wantType)

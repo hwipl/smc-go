@@ -3,46 +3,46 @@ package llc
 const (
 	// llc/cdc messages are 44 bytes long
 	// llc messages are 44 bytes long
-	llcMsgLen = 44
-	cdcMsgLen = 44
+	LLCMsgLen = 44
+	CDCMsgLen = 44
 
 	// LLC message types
-	typeConfirmLink     = 1
-	typeAddLink         = 2
-	typeAddLinkCont     = 3
-	typeDeleteLink      = 4
-	typeConfirmRKey     = 6
-	typeTestLink        = 7
-	typeConfirmRKeyCont = 8
-	typeDeleteRKey      = 9
-	typeCDC             = 0xFE
+	TypeConfirmLink     = 1
+	TypeAddLink         = 2
+	TypeAddLinkCont     = 3
+	TypeDeleteLink      = 4
+	TypeConfirmRKey     = 6
+	TypeTestLink        = 7
+	TypeConfirmRKeyCont = 8
+	TypeDeleteRKey      = 9
+	TypeCDC             = 0xFE
 )
 
 // ParseLLC parses the LLC message in buffer
 func ParseLLC(buffer []byte) Message {
 	// llc messages are 44 byte long, treat other lengths as type other
-	if len(buffer) != llcMsgLen {
+	if len(buffer) != LLCMsgLen {
 		return ParseOther(buffer)
 	}
 
 	switch buffer[0] {
-	case typeConfirmLink:
+	case TypeConfirmLink:
 		return ParseConfirm(buffer)
-	case typeAddLink:
+	case TypeAddLink:
 		return ParseAddLink(buffer)
-	case typeAddLinkCont:
+	case TypeAddLinkCont:
 		return ParseAddLinkCont(buffer)
-	case typeDeleteLink:
+	case TypeDeleteLink:
 		return ParseDeleteLink(buffer)
-	case typeConfirmRKey:
+	case TypeConfirmRKey:
 		return ParseConfirmRKey(buffer)
-	case typeConfirmRKeyCont:
+	case TypeConfirmRKeyCont:
 		return ParseConfirmRKeyCont(buffer)
-	case typeDeleteRKey:
+	case TypeDeleteRKey:
 		return parseDeleteRKey(buffer)
-	case typeTestLink:
+	case TypeTestLink:
 		return ParseTestLink(buffer)
-	case typeCDC:
+	case TypeCDC:
 		return ParseCDC(buffer)
 	default:
 		return ParseOther(buffer)

@@ -56,7 +56,7 @@ func TestDeleteLink(t *testing.T) {
 	}
 
 	// test GetType()
-	wantType := typeDeleteLink
+	wantType := TypeDeleteLink
 	gotType := d.GetType()
 	if gotType != wantType {
 		t.Errorf("d.GetType() = %d; want %d", gotType, wantType)
