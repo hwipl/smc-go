@@ -5,15 +5,15 @@ import (
 	"fmt"
 )
 
-// rkeyPair stores a RKey/RToken pair
-type rkeyPair struct {
+// RKeyPair stores a RKey/RToken pair
+type RKeyPair struct {
 	referenceRKey uint32
 	newRKey       uint32
 	newVAddr      uint64
 }
 
-// parse fills the rkeyPair fields from the buffer
-func (r *rkeyPair) parse(buffer []byte) {
+// Parse fills the rkeyPair fields from the buffer
+func (r *RKeyPair) Parse(buffer []byte) {
 	// RKey/RToken pairs are 16 bytes and consist of:
 	// * Reference Key (4 bytes)
 	// * New RKey (4 bytes)
@@ -24,7 +24,7 @@ func (r *rkeyPair) parse(buffer []byte) {
 }
 
 // String converts the rkeyPair to a string
-func (r *rkeyPair) String() string {
+func (r *RKeyPair) String() string {
 	rFmt := "[Reference RKey: %d, New RKey: %d, New Virtual Address: %#x]"
 	return fmt.Sprintf(rFmt, r.referenceRKey, r.newRKey, r.newVAddr)
 }
@@ -38,7 +38,7 @@ type addLinkCont struct {
 	link       uint8
 	numRTokens uint8
 	res3       [2]byte
-	rkeyPairs  [2]rkeyPair
+	rkeyPairs  [2]RKeyPair
 	res4       [4]byte
 }
 
@@ -77,7 +77,7 @@ func (a *addLinkCont) Parse(buffer []byte) {
 	// * first RKey/RToken pair
 	// * second RKey/RToken pair (can be all zero)
 	for i := range a.rkeyPairs {
-		a.rkeyPairs[i].parse(buffer)
+		a.rkeyPairs[i].Parse(buffer)
 		buffer = buffer[16:]
 	}
 
