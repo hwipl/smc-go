@@ -37,20 +37,20 @@ func (d DelLinkRsnCode) String() string {
 }
 
 // delteLink stores a LLC delete link message
-type deleteLink struct {
+type DeleteLink struct {
 	BaseMsg
 	res1    byte
-	reply   bool
-	all     bool
-	orderly bool
+	Reply   bool
+	All     bool
+	Orderly bool
 	res2    byte
-	link    uint8
-	rsnCode DelLinkRsnCode
+	Link    uint8
+	RsnCode DelLinkRsnCode
 	res3    [35]byte
 }
 
 // Parse fills the deleteLink fields from the LLC delete link message in buffer
-func (d *deleteLink) Parse(buffer []byte) {
+func (d *DeleteLink) Parse(buffer []byte) {
 	// init base message fields
 	d.SetBaseMsg(buffer)
 	buffer = buffer[2:]
@@ -60,24 +60,24 @@ func (d *deleteLink) Parse(buffer []byte) {
 	buffer = buffer[1:]
 
 	// Reply is first bit in this byte
-	d.reply = (buffer[0] & 0b10000000) > 0
+	d.Reply = (buffer[0] & 0b10000000) > 0
 
 	// All is the next bit in this byte
-	d.all = (buffer[0] & 0b01000000) > 0
+	d.All = (buffer[0] & 0b01000000) > 0
 
 	// Orderly is the next bit in this byte
-	d.orderly = (buffer[0] & 0b00100000) > 0
+	d.Orderly = (buffer[0] & 0b00100000) > 0
 
 	// Remainder of this byte is reserved
 	d.res2 = buffer[0] & 0b00011111
 	buffer = buffer[1:]
 
 	// Link is 1 byte
-	d.link = buffer[0]
+	d.Link = buffer[0]
 	buffer = buffer[1:]
 
 	// Reason Code is 4 bytes
-	d.rsnCode = DelLinkRsnCode(binary.BigEndian.Uint32(buffer[0:4]))
+	d.RsnCode = DelLinkRsnCode(binary.BigEndian.Uint32(buffer[0:4]))
 	buffer = buffer[4:]
 
 	// Rest of message is reserved
@@ -85,26 +85,26 @@ func (d *deleteLink) Parse(buffer []byte) {
 }
 
 // String converts the delete link message to a string
-func (d *deleteLink) String() string {
+func (d *DeleteLink) String() string {
 	dFmt := "LLC Delete Link: Type: %d, Length: %d, Reply: %t, All: %t, " +
 		"Orderly: %t, Link: %d, Reason Code: %s\n"
-	return fmt.Sprintf(dFmt, d.Type, d.Length, d.reply, d.all, d.orderly,
-		d.link, d.rsnCode)
+	return fmt.Sprintf(dFmt, d.Type, d.Length, d.Reply, d.All, d.Orderly,
+		d.Link, d.RsnCode)
 }
 
 // Reserved converts the delete link message to a string including reserved
 // fields
-func (d *deleteLink) Reserved() string {
+func (d *DeleteLink) Reserved() string {
 	dFmt := "LLC Delete Link: Type: %d, Length: %d, Reserved: %#x, " +
 		"Reply: %t, All: %t, Orderly: %t, Reserved: %#x, Link: %d, " +
 		"Reason Code: %s, Reserved: %#x\n"
-	return fmt.Sprintf(dFmt, d.Type, d.Length, d.res1, d.reply, d.all,
-		d.orderly, d.res2, d.link, d.rsnCode, d.res3)
+	return fmt.Sprintf(dFmt, d.Type, d.Length, d.res1, d.Reply, d.All,
+		d.Orderly, d.res2, d.Link, d.RsnCode, d.res3)
 }
 
-// parseDeleteLink parses the LLC delete link message in buffer
-func parseDeleteLink(buffer []byte) *deleteLink {
-	var del deleteLink
+// ParseDeleteLink parses the LLC delete link message in buffer
+func ParseDeleteLink(buffer []byte) *DeleteLink {
+	var del DeleteLink
 	del.Parse(buffer)
 	return &del
 }

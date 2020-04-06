@@ -26,7 +26,7 @@ func TestDeleteLink(t *testing.T) {
 	}
 
 	// parse message
-	d := parseDeleteLink(bytes)
+	d := ParseDeleteLink(bytes)
 
 	// test String()
 	want = "LLC Delete Link: Type: 4, Length: 44, Reply: false, " +
