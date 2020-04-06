@@ -29,22 +29,22 @@ func (r *RKeyPair) String() string {
 	return fmt.Sprintf(rFmt, r.referenceRKey, r.newRKey, r.newVAddr)
 }
 
-// addLinkCont stores a LLC add link continuation message
-type addLinkCont struct {
+// AddLinkCont stores a LLC add link continuation message
+type AddLinkCont struct {
 	BaseMsg
 	res1       byte
-	reply      bool
+	Reply      bool
 	res2       byte
-	link       uint8
-	numRTokens uint8
+	Link       uint8
+	NumRTokens uint8
 	res3       [2]byte
-	rkeyPairs  [2]RKeyPair
+	RKeyPairs  [2]RKeyPair
 	res4       [4]byte
 }
 
 // Parse fills the addLinkCont fields from the LLC add link continuation
 // message in buffer
-func (a *addLinkCont) Parse(buffer []byte) {
+func (a *AddLinkCont) Parse(buffer []byte) {
 	// init base message fields
 	a.SetBaseMsg(buffer)
 	buffer = buffer[2:]
@@ -54,18 +54,18 @@ func (a *addLinkCont) Parse(buffer []byte) {
 	buffer = buffer[1:]
 
 	// Reply is first bit in this byte
-	a.reply = (buffer[0] & 0b10000000) > 0
+	a.Reply = (buffer[0] & 0b10000000) > 0
 
 	// Remainder of this byte is reserved
 	a.res2 = buffer[0] & 0b01111111
 	buffer = buffer[1:]
 
 	// Link is 1 byte
-	a.link = buffer[0]
+	a.Link = buffer[0]
 	buffer = buffer[1:]
 
 	// Number of RTokens is 1 byte
-	a.numRTokens = buffer[0]
+	a.NumRTokens = buffer[0]
 	buffer = buffer[1:]
 
 	// Reserved 2 bytes
@@ -76,8 +76,8 @@ func (a *addLinkCont) Parse(buffer []byte) {
 	// parse
 	// * first RKey/RToken pair
 	// * second RKey/RToken pair (can be all zero)
-	for i := range a.rkeyPairs {
-		a.rkeyPairs[i].Parse(buffer)
+	for i := range a.RKeyPairs {
+		a.RKeyPairs[i].Parse(buffer)
 		buffer = buffer[16:]
 	}
 
@@ -86,40 +86,40 @@ func (a *addLinkCont) Parse(buffer []byte) {
 }
 
 // String converts the add link continuation message to a string
-func (a *addLinkCont) String() string {
+func (a *AddLinkCont) String() string {
 	var pairs string
 
 	// convert RKey pairs
-	for i := range a.rkeyPairs {
-		pairs = fmt.Sprintf(", RKey Pair %d: %s", i+1, &a.rkeyPairs[i])
+	for i := range a.RKeyPairs {
+		pairs = fmt.Sprintf(", RKey Pair %d: %s", i+1, &a.RKeyPairs[i])
 	}
 
 	aFmt := "LLC Add Link Continuation: Type: %d, Length: %d, " +
 		"Reply: %t, Link: %d, Number of RTokens: %d%s\n"
-	return fmt.Sprintf(aFmt, a.Type, a.Length, a.reply, a.link,
-		a.numRTokens, pairs)
+	return fmt.Sprintf(aFmt, a.Type, a.Length, a.Reply, a.Link,
+		a.NumRTokens, pairs)
 }
 
 // Reserved converts the add link continuation message to a string including
 // reserved fields
-func (a *addLinkCont) Reserved() string {
+func (a *AddLinkCont) Reserved() string {
 	var pairs string
 
 	// convert RKey pairs
-	for i := range a.rkeyPairs {
-		pairs = fmt.Sprintf("RKey Pair %d: %s, ", i+1, &a.rkeyPairs[i])
+	for i := range a.RKeyPairs {
+		pairs = fmt.Sprintf("RKey Pair %d: %s, ", i+1, &a.RKeyPairs[i])
 	}
 
 	aFmt := "LLC Add Link Continuation: Type: %d, Length: %d, " +
 		"Reserved: %#x, Reply: %t, Reserved: %#x, Link: %d, " +
 		"Number of RTokens: %d, Reserved: %#x, %sReserved: %#x\n"
-	return fmt.Sprintf(aFmt, a.Type, a.Length, a.res1, a.reply, a.res2,
-		a.link, a.numRTokens, a.res3, pairs, a.res4)
+	return fmt.Sprintf(aFmt, a.Type, a.Length, a.res1, a.Reply, a.res2,
+		a.Link, a.NumRTokens, a.res3, pairs, a.res4)
 }
 
-// parseAddLinkCont parses the LLC add link continuation message in buffer
-func parseAddLinkCont(buffer []byte) *addLinkCont {
-	var addCont addLinkCont
+// ParseAddLinkCont parses the LLC add link continuation message in buffer
+func ParseAddLinkCont(buffer []byte) *AddLinkCont {
+	var addCont AddLinkCont
 	addCont.Parse(buffer)
 	return &addCont
 }

@@ -26,7 +26,7 @@ func TestAddLinkCont(t *testing.T) {
 	}
 
 	// parse message
-	a := parseAddLinkCont(bytes)
+	a := ParseAddLinkCont(bytes)
 
 	// test String()
 	want = "LLC Add Link Continuation: Type: 3, Length: 44, " +
