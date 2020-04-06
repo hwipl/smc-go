@@ -20,7 +20,7 @@ func TestOther(t *testing.T) {
 	}
 
 	// parse message
-	o := parseOther(bytes)
+	o := ParseOther(bytes)
 
 	// test String()
 	want = "Other Payload\n"

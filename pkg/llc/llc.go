@@ -22,7 +22,7 @@ const (
 func ParseLLC(buffer []byte) Message {
 	// llc messages are 44 byte long, treat other lengths as type other
 	if len(buffer) != llcMsgLen {
-		return parseOther(buffer)
+		return ParseOther(buffer)
 	}
 
 	switch buffer[0] {
@@ -45,6 +45,6 @@ func ParseLLC(buffer []byte) Message {
 	case typeCDC:
 		return ParseCDC(buffer)
 	default:
-		return parseOther(buffer)
+		return ParseOther(buffer)
 	}
 }

@@ -5,31 +5,31 @@ const (
 	TypeOther = 0x101
 )
 
-// other stores an other message
-type other struct {
+// Other stores an Other message
+type Other struct {
 	BaseMsg
 }
 
 // Parse fills the other fields from the other message in buffer
-func (o *other) Parse(buffer []byte) {
+func (o *Other) Parse(buffer []byte) {
 	o.setRaw(buffer)
 	o.Type = TypeOther
 	o.Length = len(buffer)
 }
 
 // String converts the other message into a string
-func (o *other) String() string {
+func (o *Other) String() string {
 	return "Other Payload\n"
 }
 
 // Reserved converts the other message into a string including reserved fields
-func (o *other) Reserved() string {
+func (o *Other) Reserved() string {
 	return o.String()
 }
 
-// parseOther parses the other message in buffer
-func parseOther(buffer []byte) *other {
-	var o other
+// ParseOther parses the other message in buffer
+func ParseOther(buffer []byte) *Other {
+	var o Other
 	o.Parse(buffer)
 	return &o
 }
