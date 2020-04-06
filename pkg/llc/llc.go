@@ -43,7 +43,7 @@ func ParseLLC(buffer []byte) Message {
 	case typeTestLink:
 		return parseTestLink(buffer)
 	case typeCDC:
-		return parseCDC(buffer)
+		return ParseCDC(buffer)
 	default:
 		return parseOther(buffer)
 	}

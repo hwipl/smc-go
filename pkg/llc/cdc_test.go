@@ -26,7 +26,7 @@ func TestCDC(t *testing.T) {
 	}
 
 	// parse message
-	cdc := parseCDC(bytes)
+	cdc := ParseCDC(bytes)
 
 	// test String()
 	want = "CDC: Type: 254, Length 44, Sequence Number: 1, " +
