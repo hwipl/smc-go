@@ -7,9 +7,9 @@ import (
 
 // RKeyPair stores a RKey/RToken pair
 type RKeyPair struct {
-	referenceRKey uint32
-	newRKey       uint32
-	newVAddr      uint64
+	ReferenceRKey uint32
+	NewRKey       uint32
+	NewVAddr      uint64
 }
 
 // Parse fills the rkeyPair fields from the buffer
@@ -18,15 +18,15 @@ func (r *RKeyPair) Parse(buffer []byte) {
 	// * Reference Key (4 bytes)
 	// * New RKey (4 bytes)
 	// * New Virtual Address (8 bytes)
-	r.referenceRKey = binary.BigEndian.Uint32(buffer[0:4])
-	r.newRKey = binary.BigEndian.Uint32(buffer[4:8])
-	r.newVAddr = binary.BigEndian.Uint64(buffer[8:16])
+	r.ReferenceRKey = binary.BigEndian.Uint32(buffer[0:4])
+	r.NewRKey = binary.BigEndian.Uint32(buffer[4:8])
+	r.NewVAddr = binary.BigEndian.Uint64(buffer[8:16])
 }
 
 // String converts the rkeyPair to a string
 func (r *RKeyPair) String() string {
 	rFmt := "[Reference RKey: %d, New RKey: %d, New Virtual Address: %#x]"
-	return fmt.Sprintf(rFmt, r.referenceRKey, r.newRKey, r.newVAddr)
+	return fmt.Sprintf(rFmt, r.ReferenceRKey, r.NewRKey, r.NewVAddr)
 }
 
 // AddLinkCont stores a LLC add link continuation message
