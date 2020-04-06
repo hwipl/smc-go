@@ -17,11 +17,11 @@ const (
 	BTHLen = 12
 )
 
-// opcode stores the bth opcode
-type opcode uint8
+// Opcode stores the bth Opcode
+type Opcode uint8
 
 // rcString converts the reliable connection opcode to a string
-func (o opcode) rcString() string {
+func (o Opcode) rcString() string {
 	var rcStrings = [...]string{
 		"SEND First",
 		"SEND Middle",
@@ -57,7 +57,7 @@ func (o opcode) rcString() string {
 }
 
 // ucString converts the unreliable connection opcode to a string
-func (o opcode) ucString() string {
+func (o Opcode) ucString() string {
 	var ucStrings = [...]string{
 		"SEND First",
 		"SEND Middle",
@@ -81,7 +81,7 @@ func (o opcode) ucString() string {
 }
 
 // rdString converts the reliable datagram opcode to a string
-func (o opcode) rdString() string {
+func (o Opcode) rdString() string {
 	var rdStrings = [...]string{
 		"SEND First",
 		"SEND Middle",
@@ -115,7 +115,7 @@ func (o opcode) rdString() string {
 }
 
 // udString converts the unreliable datagram opcode to a string
-func (o opcode) udString() string {
+func (o Opcode) udString() string {
 	var udStrings = [...]string{
 		"Reserved",
 		"Reserved",
@@ -133,7 +133,7 @@ func (o opcode) udString() string {
 }
 
 // cnpString converts the CNP opcode to a string
-func (o opcode) cnpString() string {
+func (o Opcode) cnpString() string {
 	op := int(o & 0b00011111)
 	if op == 0b00000 {
 		return "CNP"
@@ -142,13 +142,13 @@ func (o opcode) cnpString() string {
 }
 
 // xrcString converts the extended reliable connection opcode to a string
-func (o opcode) xrcString() string {
+func (o Opcode) xrcString() string {
 	// xrc strings are the same as rc strings
 	return o.rcString()
 }
 
 // String converts the opcode to a string
-func (o opcode) String() string {
+func (o Opcode) String() string {
 	var op string
 	switch o >> 5 {
 	case 0b000:
@@ -179,7 +179,7 @@ func (o opcode) String() string {
 // BTH stores an ib base transport header
 type BTH struct {
 	raw    []byte
-	opcode opcode
+	opcode Opcode
 	se     bool
 	m      bool
 	pad    uint8
@@ -201,7 +201,7 @@ func (b *BTH) Parse(buffer []byte) {
 	copy(b.raw[:], buffer[:])
 
 	// opcode is 1 byte
-	b.opcode = opcode(buffer[0])
+	b.opcode = Opcode(buffer[0])
 	buffer = buffer[1:]
 
 	// solicited event is first bit in this byte
