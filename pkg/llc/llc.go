@@ -35,7 +35,7 @@ func ParseLLC(buffer []byte) Message {
 	case typeDeleteLink:
 		return parseDeleteLink(buffer)
 	case typeConfirmRKey:
-		return parseConfirmRKey(buffer)
+		return ParseConfirmRKey(buffer)
 	case typeConfirmRKeyCont:
 		return parseConfirmRKeyCont(buffer)
 	case typeDeleteRKey:

@@ -26,7 +26,7 @@ func TestConfirmRKey(t *testing.T) {
 	}
 
 	// parse message
-	c := parseConfirmRKey(bytes)
+	c := ParseConfirmRKey(bytes)
 
 	// test String()
 	want = "LLC Confirm RKey: Type: 6, Length: 44, Reply: false, " +

@@ -29,24 +29,24 @@ func (r *RMBSpec) String() string {
 	return fmt.Sprintf(rFmt, r.Link, r.RKey, r.VAddr)
 }
 
-// confirmRKey stores a LLC confirm RKey message
-type confirmRKey struct {
+// ConfirmRKey stores a LLC confirm RKey message
+type ConfirmRKey struct {
 	BaseMsg
 	res1      byte
-	reply     bool
+	Reply     bool
 	res2      byte
-	reject    bool // negative response
-	retry     bool // configuration retry
+	Reject    bool // negative response
+	Retry     bool // configuration retry
 	res3      byte
-	numTkns   uint8
-	rkey      uint32
-	vaddr     uint64
-	otherRMBs [2]RMBSpec
+	NumTkns   uint8
+	RKey      uint32
+	VAddr     uint64
+	OtherRMBs [2]RMBSpec
 	res4      byte
 }
 
 // Parse fills the confirmRKey fields from the confirm RKey message in buffer
-func (c *confirmRKey) Parse(buffer []byte) {
+func (c *ConfirmRKey) Parse(buffer []byte) {
 	// init base message fields
 	c.SetBaseMsg(buffer)
 	buffer = buffer[2:]
@@ -56,39 +56,39 @@ func (c *confirmRKey) Parse(buffer []byte) {
 	buffer = buffer[1:]
 
 	// Reply is first bit in this byte
-	c.reply = (buffer[0] & 0b10000000) > 0
+	c.Reply = (buffer[0] & 0b10000000) > 0
 
 	// Reserved is the next bit in this byte
 	c.res2 = (buffer[0] & 0b01000000) >> 6
 
 	// Negative response flag is the next bit in this byte
-	c.reject = (buffer[0] & 0b00100000) > 0
+	c.Reject = (buffer[0] & 0b00100000) > 0
 
 	// Configuration Retry is the next bit in this byte
-	c.retry = (buffer[0] & 0b00010000) > 0
+	c.Retry = (buffer[0] & 0b00010000) > 0
 
 	// Remainder of this byte is reserved
 	c.res3 = buffer[0] & 0b00001111
 	buffer = buffer[1:]
 
 	// Number of tokens is 1 byte
-	c.numTkns = buffer[0]
+	c.NumTkns = buffer[0]
 	buffer = buffer[1:]
 
 	// New RMB RKey for this link is 4 bytes
-	c.rkey = binary.BigEndian.Uint32(buffer[0:4])
+	c.RKey = binary.BigEndian.Uint32(buffer[0:4])
 	buffer = buffer[4:]
 
 	// New RMB virtual address for this link is 8 bytes
-	c.vaddr = binary.BigEndian.Uint64(buffer[0:8])
+	c.VAddr = binary.BigEndian.Uint64(buffer[0:8])
 	buffer = buffer[8:]
 
 	// other link rmb specifications are each 13 bytes
 	// parse
 	// * first other link rmb (can be all zeros)
 	// * second other link rmb (can be all zeros)
-	for i := range c.otherRMBs {
-		c.otherRMBs[i].Parse(buffer)
+	for i := range c.OtherRMBs {
+		c.OtherRMBs[i].Parse(buffer)
 		buffer = buffer[13:]
 	}
 
@@ -97,29 +97,29 @@ func (c *confirmRKey) Parse(buffer []byte) {
 }
 
 // String converts the confirm RKey message to a string
-func (c *confirmRKey) String() string {
+func (c *ConfirmRKey) String() string {
 	var others string
 
-	for i := range c.otherRMBs {
+	for i := range c.OtherRMBs {
 		others += fmt.Sprintf(", Other Link RMB %d: %s", i+1,
-			&c.otherRMBs[i])
+			&c.OtherRMBs[i])
 	}
 
 	cFmt := "LLC Confirm RKey: Type: %d, Length: %d, Reply: %t, " +
 		"Negative Response: %t, Configuration Retry: %t, " +
 		"Number of Tokens: %d, This RKey: %d, This VAddr: %#x%s\n"
-	return fmt.Sprintf(cFmt, c.Type, c.Length, c.reply, c.reject, c.retry,
-		c.numTkns, c.rkey, c.vaddr, others)
+	return fmt.Sprintf(cFmt, c.Type, c.Length, c.Reply, c.Reject, c.Retry,
+		c.NumTkns, c.RKey, c.VAddr, others)
 }
 
 // Reserved converts the confirm RKey message to a string including reserved
 // fields
-func (c *confirmRKey) Reserved() string {
+func (c *ConfirmRKey) Reserved() string {
 	var others string
 
-	for i := range c.otherRMBs {
+	for i := range c.OtherRMBs {
 		others += fmt.Sprintf("Other Link RMB %d: %s, ", i+1,
-			&c.otherRMBs[i])
+			&c.OtherRMBs[i])
 	}
 
 	cFmt := "LLC Confirm RKey: Type: %d, Length: %d, Reserved: %#x, " +
@@ -127,14 +127,14 @@ func (c *confirmRKey) Reserved() string {
 		"Configuration Retry: %t, Reserved: %#x, " +
 		"Number of Tokens: %d, This RKey: %d, This VAddr: %#x, " +
 		"%sReserved: %#x\n"
-	return fmt.Sprintf(cFmt, c.Type, c.Length, c.res1, c.reply, c.res2,
-		c.reject, c.retry, c.res3, c.numTkns, c.rkey, c.vaddr, others,
+	return fmt.Sprintf(cFmt, c.Type, c.Length, c.res1, c.Reply, c.res2,
+		c.Reject, c.Retry, c.res3, c.NumTkns, c.RKey, c.VAddr, others,
 		c.res4)
 }
 
-// parseConfirmRKey parses the LLC confirm RKey message in buffer
-func parseConfirmRKey(buffer []byte) *confirmRKey {
-	var confirm confirmRKey
+// ParseConfirmRKey parses the LLC confirm RKey message in buffer
+func ParseConfirmRKey(buffer []byte) *ConfirmRKey {
+	var confirm ConfirmRKey
 	confirm.Parse(buffer)
 	return &confirm
 }
