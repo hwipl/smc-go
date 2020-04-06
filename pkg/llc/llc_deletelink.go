@@ -5,11 +5,11 @@ import (
 	"fmt"
 )
 
-// delLinkRsnCode stores the reason code of a delete link message
-type delLinkRsnCode uint32
+// DelLinkRsnCode stores the reason code of a delete link message
+type DelLinkRsnCode uint32
 
 // String converts the delete link reason code to a string
-func (d delLinkRsnCode) String() string {
+func (d DelLinkRsnCode) String() string {
 	var rsn string
 
 	switch d {
@@ -45,7 +45,7 @@ type deleteLink struct {
 	orderly bool
 	res2    byte
 	link    uint8
-	rsnCode delLinkRsnCode
+	rsnCode DelLinkRsnCode
 	res3    [35]byte
 }
 
@@ -77,7 +77,7 @@ func (d *deleteLink) Parse(buffer []byte) {
 	buffer = buffer[1:]
 
 	// Reason Code is 4 bytes
-	d.rsnCode = delLinkRsnCode(binary.BigEndian.Uint32(buffer[0:4]))
+	d.rsnCode = DelLinkRsnCode(binary.BigEndian.Uint32(buffer[0:4]))
 	buffer = buffer[4:]
 
 	// Rest of message is reserved
