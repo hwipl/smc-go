@@ -26,7 +26,7 @@ func TestConfirmLink(t *testing.T) {
 	}
 
 	// parse message
-	c := parseConfirm(bytes)
+	c := ParseConfirm(bytes)
 
 	// test String()
 	want = "LLC Confirm Link: Type: 1, Length: 44, Reply: false, " +

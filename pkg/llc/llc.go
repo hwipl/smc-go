@@ -27,7 +27,7 @@ func ParseLLC(buffer []byte) Message {
 
 	switch buffer[0] {
 	case typeConfirmLink:
-		return parseConfirm(buffer)
+		return ParseConfirm(buffer)
 	case typeAddLink:
 		return ParseAddLink(buffer)
 	case typeAddLinkCont:
