@@ -13,8 +13,8 @@ type other struct {
 // Parse fills the other fields from the other message in buffer
 func (o *other) Parse(buffer []byte) {
 	o.setRaw(buffer)
-	o.typ = TypeOther
-	o.length = len(buffer)
+	o.Type = TypeOther
+	o.Length = len(buffer)
 }
 
 // String converts the other message into a string

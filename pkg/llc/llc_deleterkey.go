@@ -23,7 +23,7 @@ type deleteRKey struct {
 // Parse fills the deleteRKey fields from the delete RKey message in buffer
 func (d *deleteRKey) Parse(buffer []byte) {
 	// init base message fields
-	d.setBaseMsg(buffer)
+	d.SetBaseMsg(buffer)
 	buffer = buffer[2:]
 
 	// Reserved 1 byte
@@ -85,7 +85,7 @@ func (d *deleteRKey) String() string {
 	dFmt := "LLC Delete RKey: Type: %d, Length: %d, " +
 		"Reply: %t, Negative Response: %t, Count: %d, " +
 		"Error Mask: %#b%s\n"
-	return fmt.Sprintf(dFmt, d.typ, d.length, d.reply, d.reject, d.count,
+	return fmt.Sprintf(dFmt, d.Type, d.Length, d.reply, d.reject, d.count,
 		d.errorMask, rkeys)
 }
 
@@ -102,7 +102,7 @@ func (d *deleteRKey) Reserved() string {
 		"Reserved: %#x, Reply: %t, Reserved: %#x, " +
 		"Negative Response: %t, Reserved: %#x, " +
 		"Count: %d, Error Mask: %#b, Reserved: %#x, %sReserved: %#x\n"
-	return fmt.Sprintf(dFmt, d.typ, d.length, d.res1, d.reply, d.res2,
+	return fmt.Sprintf(dFmt, d.Type, d.Length, d.res1, d.reply, d.res2,
 		d.reject, d.res3, d.count, d.errorMask, d.res4, rkeys, d.res5)
 }
 

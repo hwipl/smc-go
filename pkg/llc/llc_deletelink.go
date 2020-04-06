@@ -52,7 +52,7 @@ type deleteLink struct {
 // Parse fills the deleteLink fields from the LLC delete link message in buffer
 func (d *deleteLink) Parse(buffer []byte) {
 	// init base message fields
-	d.setBaseMsg(buffer)
+	d.SetBaseMsg(buffer)
 	buffer = buffer[2:]
 
 	// Reserved 1 byte
@@ -88,7 +88,7 @@ func (d *deleteLink) Parse(buffer []byte) {
 func (d *deleteLink) String() string {
 	dFmt := "LLC Delete Link: Type: %d, Length: %d, Reply: %t, All: %t, " +
 		"Orderly: %t, Link: %d, Reason Code: %s\n"
-	return fmt.Sprintf(dFmt, d.typ, d.length, d.reply, d.all, d.orderly,
+	return fmt.Sprintf(dFmt, d.Type, d.Length, d.reply, d.all, d.orderly,
 		d.link, d.rsnCode)
 }
 
@@ -98,7 +98,7 @@ func (d *deleteLink) Reserved() string {
 	dFmt := "LLC Delete Link: Type: %d, Length: %d, Reserved: %#x, " +
 		"Reply: %t, All: %t, Orderly: %t, Reserved: %#x, Link: %d, " +
 		"Reason Code: %s, Reserved: %#x\n"
-	return fmt.Sprintf(dFmt, d.typ, d.length, d.res1, d.reply, d.all,
+	return fmt.Sprintf(dFmt, d.Type, d.Length, d.res1, d.reply, d.all,
 		d.orderly, d.res2, d.link, d.rsnCode, d.res3)
 }
 

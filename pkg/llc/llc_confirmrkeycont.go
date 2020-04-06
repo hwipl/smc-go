@@ -20,7 +20,7 @@ type confirmRKeyCont struct {
 func (c *confirmRKeyCont) Parse(buffer []byte) {
 	// TODO: merge with confirmRKey()?
 	// init base message fields
-	c.setBaseMsg(buffer)
+	c.SetBaseMsg(buffer)
 	buffer = buffer[2:]
 
 	// Reserved 1 byte
@@ -69,7 +69,7 @@ func (c *confirmRKeyCont) String() string {
 
 	cFmt := "LLC Confirm RKey Continuation: Type: %d, Length: %d, " +
 		"Reply: %t, Negative Response: %t, Number of Tokens: %d%s\n"
-	return fmt.Sprintf(cFmt, c.typ, c.length, c.reply, c.reject, c.numTkns,
+	return fmt.Sprintf(cFmt, c.Type, c.Length, c.reply, c.reject, c.numTkns,
 		others)
 }
 
@@ -87,7 +87,7 @@ func (c *confirmRKeyCont) Reserved() string {
 		"Reserved: %#x, Reply: %t, Reserved: %#x, " +
 		"Negative Response: %t, Reserved: %#x, " +
 		"Number of Tokens: %d, %sReserved: %#x\n"
-	return fmt.Sprintf(cFmt, c.typ, c.length, c.res1, c.reply, c.res2,
+	return fmt.Sprintf(cFmt, c.Type, c.Length, c.res1, c.reply, c.res2,
 		c.reject, c.res3, c.numTkns, others, c.res4)
 }
 

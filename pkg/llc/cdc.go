@@ -34,11 +34,11 @@ func (c *cdc) Parse(buffer []byte) {
 	c.setRaw(buffer)
 
 	// Message type is 1 byte
-	c.typ = int(buffer[0])
+	c.Type = int(buffer[0])
 	buffer = buffer[1:]
 
 	// Message length is 1 byte, should be equal to 44
-	c.length = int(buffer[0])
+	c.Length = int(buffer[0])
 	buffer = buffer[1:]
 
 	// Sequence number is 2 bytes
@@ -119,7 +119,7 @@ func (c *cdc) String() string {
 		"Request for Consumer Cursor Update: %t, " +
 		"Failover Validation: %t, Sending Done: %t, " +
 		"Peer Connection Closed: %t, Abnormal Close: %t\n"
-	return fmt.Sprintf(cFmt, c.typ, c.length, c.seqNum, c.alertTkn,
+	return fmt.Sprintf(cFmt, c.Type, c.Length, c.seqNum, c.alertTkn,
 		c.prodWrap, c.prodCurs, c.consWrap, c.consCurs, c.b, c.p, c.u,
 		c.r, c.f, c.d, c.c, c.a)
 }
@@ -135,7 +135,7 @@ func (c *cdc) Reserved() string {
 		"Failover Validation: %t, Reserved: %#x, Sending Done: %t, " +
 		"Peer Connection Closed: %t, Abnormal Close: %t, " +
 		"Reserved: %#x\n"
-	return fmt.Sprintf(cFmt, c.typ, c.length, c.seqNum, c.alertTkn, c.res1,
+	return fmt.Sprintf(cFmt, c.Type, c.Length, c.seqNum, c.alertTkn, c.res1,
 		c.prodWrap, c.prodCurs, c.res2, c.consWrap, c.consCurs, c.b,
 		c.p, c.u, c.r, c.f, c.res3, c.d, c.c, c.a, c.res4)
 }

@@ -48,7 +48,7 @@ type confirmRKey struct {
 // Parse fills the confirmRKey fields from the confirm RKey message in buffer
 func (c *confirmRKey) Parse(buffer []byte) {
 	// init base message fields
-	c.setBaseMsg(buffer)
+	c.SetBaseMsg(buffer)
 	buffer = buffer[2:]
 
 	// Reserved 1 byte
@@ -108,7 +108,7 @@ func (c *confirmRKey) String() string {
 	cFmt := "LLC Confirm RKey: Type: %d, Length: %d, Reply: %t, " +
 		"Negative Response: %t, Configuration Retry: %t, " +
 		"Number of Tokens: %d, This RKey: %d, This VAddr: %#x%s\n"
-	return fmt.Sprintf(cFmt, c.typ, c.length, c.reply, c.reject, c.retry,
+	return fmt.Sprintf(cFmt, c.Type, c.Length, c.reply, c.reject, c.retry,
 		c.numTkns, c.rkey, c.vaddr, others)
 }
 
@@ -127,7 +127,7 @@ func (c *confirmRKey) Reserved() string {
 		"Configuration Retry: %t, Reserved: %#x, " +
 		"Number of Tokens: %d, This RKey: %d, This VAddr: %#x, " +
 		"%sReserved: %#x\n"
-	return fmt.Sprintf(cFmt, c.typ, c.length, c.res1, c.reply, c.res2,
+	return fmt.Sprintf(cFmt, c.Type, c.Length, c.res1, c.reply, c.res2,
 		c.reject, c.retry, c.res3, c.numTkns, c.rkey, c.vaddr, others,
 		c.res4)
 }

@@ -46,7 +46,7 @@ type addLinkCont struct {
 // message in buffer
 func (a *addLinkCont) Parse(buffer []byte) {
 	// init base message fields
-	a.setBaseMsg(buffer)
+	a.SetBaseMsg(buffer)
 	buffer = buffer[2:]
 
 	// Reserved 1 byte
@@ -96,7 +96,7 @@ func (a *addLinkCont) String() string {
 
 	aFmt := "LLC Add Link Continuation: Type: %d, Length: %d, " +
 		"Reply: %t, Link: %d, Number of RTokens: %d%s\n"
-	return fmt.Sprintf(aFmt, a.typ, a.length, a.reply, a.link,
+	return fmt.Sprintf(aFmt, a.Type, a.Length, a.reply, a.link,
 		a.numRTokens, pairs)
 }
 
@@ -113,7 +113,7 @@ func (a *addLinkCont) Reserved() string {
 	aFmt := "LLC Add Link Continuation: Type: %d, Length: %d, " +
 		"Reserved: %#x, Reply: %t, Reserved: %#x, Link: %d, " +
 		"Number of RTokens: %d, Reserved: %#x, %sReserved: %#x\n"
-	return fmt.Sprintf(aFmt, a.typ, a.length, a.res1, a.reply, a.res2,
+	return fmt.Sprintf(aFmt, a.Type, a.Length, a.res1, a.reply, a.res2,
 		a.link, a.numRTokens, a.res3, pairs, a.res4)
 }
 

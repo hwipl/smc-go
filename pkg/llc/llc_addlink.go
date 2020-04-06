@@ -72,7 +72,7 @@ type addLink struct {
 // Parse fills the addLink fields from the LLC add link message in buffer
 func (a *addLink) Parse(buffer []byte) {
 	// init base message fields
-	a.setBaseMsg(buffer)
+	a.SetBaseMsg(buffer)
 	buffer = buffer[2:]
 
 	// Reserved are first 4 bits in this byte
@@ -139,7 +139,7 @@ func (a *addLink) String() string {
 	aFmt := "LLC Add Link: Type: %d, Length: %d, Reason Code: %s, " +
 		"Reply: %t, Rejection: %t, Sender MAC: %s, Sender GID: %s, " +
 		"Sender QP: %d, Link: %d, MTU: %s, Initial PSN: %d\n"
-	return fmt.Sprintf(aFmt, a.typ, a.length, a.rsnCode, a.reply, a.reject,
+	return fmt.Sprintf(aFmt, a.Type, a.Length, a.rsnCode, a.reply, a.reject,
 		a.senderMAC, a.senderGID, a.senderQP, a.link, a.mtu, a.psn)
 }
 
@@ -150,7 +150,7 @@ func (a *addLink) Reserved() string {
 		"Reason Code: %s, Reply: %t, Rejection: %t, Reserved: %#x, " +
 		"Sender MAC: %s, Sender GID: %s, Sender QP: %d, Link: %d, " +
 		"Reserved: %#x, MTU: %s, Initial PSN: %d, Reserved: %#x\n"
-	return fmt.Sprintf(aFmt, a.typ, a.length, a.res1, a.rsnCode, a.reply,
+	return fmt.Sprintf(aFmt, a.Type, a.Length, a.res1, a.rsnCode, a.reply,
 		a.reject, a.res2, a.senderMAC, a.senderGID, a.senderQP, a.link,
 		a.res3, a.mtu, a.psn, a.res4)
 }

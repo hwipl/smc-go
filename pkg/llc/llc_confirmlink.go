@@ -25,7 +25,7 @@ type confirmLink struct {
 // buffer
 func (c *confirmLink) Parse(buffer []byte) {
 	// init base message fields
-	c.setBaseMsg(buffer)
+	c.SetBaseMsg(buffer)
 	buffer = buffer[2:]
 
 	// Reserved 1 byte
@@ -76,7 +76,7 @@ func (c *confirmLink) String() string {
 	cFmt := "LLC Confirm Link: Type: %d, Length: %d, Reply: %t, " +
 		"Sender MAC: %s, Sender GID: %s, Sender QP: %d, Link: %d, " +
 		"Sender Link UserID: %d, Max Links: %d\n"
-	return fmt.Sprintf(cFmt, c.typ, c.length, c.reply, c.senderMAC,
+	return fmt.Sprintf(cFmt, c.Type, c.Length, c.reply, c.senderMAC,
 		c.senderGID, c.senderQP, c.link, c.senderLinkUserID,
 		c.maxLinks)
 }
@@ -88,7 +88,7 @@ func (c *confirmLink) Reserved() string {
 		"Reply: %t, Reserved: %#x, Sender MAC: %s, Sender GID: %s, " +
 		"Sender QP: %d, Link: %d, Sender Link UserID: %d, " +
 		"Max Links: %d, Reserved: %#x\n"
-	return fmt.Sprintf(cFmt, c.typ, c.length, c.res1, c.reply, c.res2,
+	return fmt.Sprintf(cFmt, c.Type, c.Length, c.res1, c.reply, c.res2,
 		c.senderMAC, c.senderGID, c.senderQP, c.link,
 		c.senderLinkUserID, c.maxLinks, c.res3)
 }

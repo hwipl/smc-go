@@ -15,7 +15,7 @@ type testLink struct {
 // Parse fills the testLink fields from the test link message in buffer
 func (t *testLink) Parse(buffer []byte) {
 	// init base message fields
-	t.setBaseMsg(buffer)
+	t.SetBaseMsg(buffer)
 	buffer = buffer[2:]
 
 	// Reserved 1 byte
@@ -41,7 +41,7 @@ func (t *testLink) Parse(buffer []byte) {
 func (t *testLink) String() string {
 	tFmt := "LLC Test Link: Type %d, Length: %d, Reply: %t, " +
 		"User Data: %#x\n"
-	return fmt.Sprintf(tFmt, t.typ, t.length, t.reply, t.userData)
+	return fmt.Sprintf(tFmt, t.Type, t.Length, t.reply, t.userData)
 }
 
 // Reserved converts the test link message to a string including reserved
@@ -49,7 +49,7 @@ func (t *testLink) String() string {
 func (t *testLink) Reserved() string {
 	tFmt := "LLC Test Link: Type %d, Length: %d, Reserved: %#x, " +
 		"Reply: %t, Reserved: %#x, User Data: %#x, Reserved: %#x\n"
-	return fmt.Sprintf(tFmt, t.typ, t.length, t.res1, t.reply, t.res2,
+	return fmt.Sprintf(tFmt, t.Type, t.Length, t.res1, t.reply, t.res2,
 		t.userData, t.res3)
 }
 
