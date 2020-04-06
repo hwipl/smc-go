@@ -178,84 +178,84 @@ func (o Opcode) String() string {
 
 // BTH stores an ib base transport header
 type BTH struct {
-	raw    []byte
-	opcode Opcode
-	se     bool
-	m      bool
-	pad    uint8
-	tver   uint8
-	pkey   uint16
-	fecn   bool
-	becn   bool
+	Raw    []byte
+	Opcode Opcode
+	SE     bool
+	M      bool
+	Pad    uint8
+	TVer   uint8
+	PKey   uint16
+	FECN   bool
+	BECN   bool
 	res1   byte
-	destQP uint32
-	a      bool
+	DestQP uint32
+	A      bool
 	res2   byte
-	psn    uint32
+	PSN    uint32
 }
 
 // Parse fills the bth fields from the base transport header in buffer
 func (b *BTH) Parse(buffer []byte) {
 	// save raw message bytes, set internal type and length
-	b.raw = make([]byte, len(buffer))
-	copy(b.raw[:], buffer[:])
+	b.Raw = make([]byte, len(buffer))
+	copy(b.Raw[:], buffer[:])
 
 	// opcode is 1 byte
-	b.opcode = Opcode(buffer[0])
+	b.Opcode = Opcode(buffer[0])
 	buffer = buffer[1:]
 
 	// solicited event is first bit in this byte
-	b.se = (buffer[0] & 0b10000000) > 0
+	b.SE = (buffer[0] & 0b10000000) > 0
 
 	// MigReq is the next bit in this byte
-	b.m = (buffer[0] & 0b01000000) > 0
+	b.M = (buffer[0] & 0b01000000) > 0
 
 	// pad count is the next 2 bits in this byte
-	b.pad = (buffer[0] & 0b00110000) >> 4
+	b.Pad = (buffer[0] & 0b00110000) >> 4
 
 	// transport header version is last 4 bits in this byte
-	b.tver = buffer[0] & 0b00001111
+	b.TVer = buffer[0] & 0b00001111
 	buffer = buffer[1:]
 
 	// partition key is 2 bytes
-	b.pkey = binary.BigEndian.Uint16(buffer[0:2])
+	b.PKey = binary.BigEndian.Uint16(buffer[0:2])
 	buffer = buffer[2:]
 
 	// FECN is first bit in this byte
-	b.fecn = (buffer[0] & 0b10000000) > 0
+	b.FECN = (buffer[0] & 0b10000000) > 0
 
 	// BECN is next bit in this byte
-	b.becn = (buffer[0] & 0b01000000) > 0
+	b.BECN = (buffer[0] & 0b01000000) > 0
 
 	// Reserved are the last 6 bits in this byte
 	b.res1 = buffer[0] & 0b00111111
 	buffer = buffer[1:]
 
 	// destination QP number is 3 bytes
-	b.destQP = uint32(buffer[0]) << 16
-	b.destQP |= uint32(buffer[1]) << 8
-	b.destQP |= uint32(buffer[2])
+	b.DestQP = uint32(buffer[0]) << 16
+	b.DestQP |= uint32(buffer[1]) << 8
+	b.DestQP |= uint32(buffer[2])
 	buffer = buffer[3:]
 
 	// AckReq is first bit in this byte
-	b.a = (buffer[0] & 0b10000000) > 0
+	b.A = (buffer[0] & 0b10000000) > 0
 
 	// Reserved are the last 7 bits in this byte
 	b.res2 = buffer[0] & 0b01111111
 	buffer = buffer[1:]
 
 	// Packet Sequence Number is 3 bytes
-	b.psn = uint32(buffer[0]) << 16
-	b.psn |= uint32(buffer[1]) << 8
-	b.psn |= uint32(buffer[2])
+	b.PSN = uint32(buffer[0]) << 16
+	b.PSN |= uint32(buffer[1]) << 8
+	b.PSN |= uint32(buffer[2])
 }
 
 // String converts the base transport header to a string
 func (b *BTH) String() string {
 	bfmt := "BTH: OpCode: %s, SE: %t, M: %t, Pad: %d, TVer: %d, " +
 		"PKey: %d, FECN: %t, BECN: %t, DestQP: %d, A: %t, PSN: %d\n"
-	return fmt.Sprintf(bfmt, b.opcode, b.se, b.m, b.pad, b.tver, b.pkey,
-		b.fecn, b.becn, b.destQP, b.a, b.psn)
+	return fmt.Sprintf(bfmt, b.Opcode, b.SE, b.M, b.Pad, b.TVer, b.PKey,
+		b.FECN, b.BECN, b.DestQP, b.A, b.PSN)
 }
 
 // Reserved converts the base transport header to a string
@@ -263,13 +263,13 @@ func (b *BTH) Reserved() string {
 	bfmt := "BTH: OpCode: %s, SE: %t, M: %t, Pad: %d, TVer: %d, " +
 		"PKey: %d, FECN: %t, BECN: %t, Res: %#x, DestQP: %d, " +
 		"A: %t, Res: %#x, PSN: %d\n"
-	return fmt.Sprintf(bfmt, b.opcode, b.se, b.m, b.pad, b.tver, b.pkey,
-		b.fecn, b.becn, b.res1, b.destQP, b.a, b.res2, b.psn)
+	return fmt.Sprintf(bfmt, b.Opcode, b.SE, b.M, b.Pad, b.TVer, b.PKey,
+		b.FECN, b.BECN, b.res1, b.DestQP, b.A, b.res2, b.PSN)
 }
 
 // Hex converts the message to a hex dump string
 func (b *BTH) Hex() string {
-	return hex.Dump(b.raw)
+	return hex.Dump(b.Raw)
 }
 
 // GetType returns the type of the message
