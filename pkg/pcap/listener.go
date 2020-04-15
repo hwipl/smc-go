@@ -107,13 +107,13 @@ func (p *Listener) Loop() {
 			if packet == nil {
 				return
 			}
-			p.PacketHandler.HandlePacket(packet)
+			p.PacketHandler.Handle(packet)
 			count++
 			if p.MaxPkts > 0 && count == p.MaxPkts {
 				return
 			}
 		case <-ticker:
-			p.TimerHandler.HandleTimer()
+			p.TimerHandler.Handle()
 		case <-stop:
 			return
 		}
