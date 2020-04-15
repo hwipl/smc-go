@@ -9,7 +9,7 @@ import (
 	"github.com/google/gopacket/pcap"
 )
 
-type PcapHandler interface {
+type Handler interface {
 	HandlePacket(gopacket.Packet)
 	HandleTimer()
 }
@@ -17,7 +17,7 @@ type PcapHandler interface {
 type PcapListener struct {
 	pcapHandle *pcap.Handle
 
-	Handler PcapHandler
+	Handler Handler
 	Timer   time.Duration
 
 	File    string
