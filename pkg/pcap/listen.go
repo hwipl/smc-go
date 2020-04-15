@@ -14,7 +14,7 @@ type Handler interface {
 	HandleTimer()
 }
 
-type PcapListener struct {
+type Listener struct {
 	pcapHandle *pcap.Handle
 
 	Handler Handler
@@ -31,7 +31,7 @@ type PcapListener struct {
 }
 
 // getFirstPcapInterface sets the first network interface found by pcap
-func (p *PcapListener) getFirstPcapInterface() {
+func (p *Listener) getFirstPcapInterface() {
 	ifs, err := pcap.FindAllDevs()
 	if err != nil {
 		log.Fatal(err)
@@ -44,7 +44,7 @@ func (p *PcapListener) getFirstPcapInterface() {
 }
 
 // Prepare prepares the pcap listener for the listen function
-func (p *PcapListener) Prepare() {
+func (p *Listener) Prepare() {
 	// open pcap handle
 	var pcapErr error
 	var startText string
@@ -83,7 +83,7 @@ func (p *PcapListener) Prepare() {
 }
 
 // Loop implements the listen loop for the listen function
-func (p *PcapListener) Loop() {
+func (p *Listener) Loop() {
 	defer p.pcapHandle.Close()
 
 	// Use the handle as a packet source to process all packets
