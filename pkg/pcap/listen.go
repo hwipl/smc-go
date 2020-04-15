@@ -9,11 +9,14 @@ import (
 	"github.com/google/gopacket/pcap"
 )
 
+// Handler is the interface for handlers called by Listener
 type Handler interface {
 	HandlePacket(gopacket.Packet)
 	HandleTimer()
 }
 
+// Listener is a pcap listener that reads packets from a file or device and
+// calls Handlers for packets and timer events
 type Listener struct {
 	pcapHandle *pcap.Handle
 
