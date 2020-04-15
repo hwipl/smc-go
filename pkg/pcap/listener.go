@@ -14,8 +14,10 @@ import (
 type Listener struct {
 	pcapHandle *pcap.Handle
 
-	Handler Handler
-	Timer   time.Duration
+	PacketHandler PacketHandler
+
+	Timer        time.Duration
+	TimerHandler TimerHandler
 
 	File    string
 	Device  string
@@ -105,13 +107,13 @@ func (p *Listener) Loop() {
 			if packet == nil {
 				return
 			}
-			p.Handler.HandlePacket(packet)
+			p.PacketHandler.HandlePacket(packet)
 			count++
 			if p.MaxPkts > 0 && count == p.MaxPkts {
 				return
 			}
 		case <-ticker:
-			p.Handler.HandleTimer()
+			p.TimerHandler.HandleTimer()
 		case <-stop:
 			return
 		}
