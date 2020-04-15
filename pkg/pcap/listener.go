@@ -85,13 +85,21 @@ func (p *Listener) Prepare() {
 func (p *Listener) Loop() {
 	defer p.pcapHandle.Close()
 
+	// make sure there is a packet handler
+	if p.PacketHandler == nil {
+		log.Fatal("no packet handler set")
+	}
+
 	// Use the handle as a packet source to process all packets
 	packetSource := gopacket.NewPacketSource(p.pcapHandle,
 		p.pcapHandle.LinkType())
 	packets := packetSource.Packets()
 
-	// setup timer
+	// setup timer and check timer handler
 	ticker := time.Tick(p.Timer)
+	if ticker != nil && p.TimerHandler == nil {
+		log.Fatal("timer used but no timer handler set")
+	}
 
 	// set stop time if configured
 	stop := make(<-chan time.Time)
