@@ -20,8 +20,8 @@ type Server struct {
 	Listener net.Listener
 }
 
-// printHTTP prints the content of the http server's Buffer to http clients
-func printHTTP(w http.ResponseWriter, r *http.Request) {
+// handleRequest prints the content of the http server's Buffer to http clients
+func handleRequest(w http.ResponseWriter, r *http.Request) {
 	b := server.Buffer.CopyBuffer()
 	if _, err := io.Copy(w, b); err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -43,7 +43,7 @@ func StartHTTPOutput(address string) *Server {
 	server.Listener = listener
 
 	// start listening
-	http.HandleFunc("/", printHTTP)
+	http.HandleFunc("/", handleRequest)
 	go http.Serve(listener, nil)
 
 	return &server
