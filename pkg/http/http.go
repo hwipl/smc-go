@@ -10,17 +10,17 @@ import (
 )
 
 var (
-	httpOutput HTTPOutput
+	httpOutput Server
 )
 
-// HTTPOutput is returned by StartHTTPOutput and contains an output buffer for
+// Server is returned by StartHTTPOutput and contains an output buffer for
 // the http server and the listener of the http server
-type HTTPOutput struct {
+type Server struct {
 	Buffer   Buffer
 	Listener net.Listener
 }
 
-// printHTTP prints the corresponding HTTPOutput Buffer to http clients
+// printHTTP prints the content of the http server's Buffer to http clients
 func printHTTP(w http.ResponseWriter, r *http.Request) {
 	b := httpOutput.Buffer.CopyBuffer()
 	if _, err := io.Copy(w, b); err != nil {
@@ -33,8 +33,8 @@ func printHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 // StartHTTPOutput starts a http server that listens on address, and returns
-// HTTPOutput that contains the output Buffer and Listener
-func StartHTTPOutput(address string) *HTTPOutput {
+// Server that contains the output Buffer and Listener
+func StartHTTPOutput(address string) *Server {
 	// create listener
 	listener, err := net.Listen("tcp", address)
 	if err != nil {
