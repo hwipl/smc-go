@@ -13,6 +13,8 @@ var (
 	httpOutput HTTPOutput
 )
 
+// HTTPOutput is returned by StartHTTPOutput and contains an output buffer for
+// the http server and the listener of the http server
 type HTTPOutput struct {
 	Buffer   Buffer
 	Listener net.Listener
