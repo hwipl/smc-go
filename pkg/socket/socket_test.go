@@ -58,4 +58,52 @@ func TestListen(t *testing.T) {
 		t.Errorf("Addr() = %s; want %s", got, want)
 	}
 	l.Close()
+
+	// test specific ip, specific port, ipv6
+	l, err = Listen("::1", 50000)
+	if err != nil {
+		log.Fatal(err)
+	}
+	want = "[::1]:50000"
+	got = l.Addr().String()
+	if got != want {
+		t.Errorf("Addr() = %s; want %s", got, want)
+	}
+	l.Close()
+
+	// test specific ip, random port, ipv6
+	l, err = Listen("::1", 0)
+	if err != nil {
+		log.Fatal(err)
+	}
+	want = "[::1]:"             // ignore port
+	got = l.Addr().String()[:6] // ignore port
+	if got != want {
+		t.Errorf("Addr() = %s; want %s", got, want)
+	}
+	l.Close()
+
+	// test all ips, specific port, ipv6
+	l, err = Listen("::", 50000)
+	if err != nil {
+		log.Fatal(err)
+	}
+	want = "[::]:50000"
+	got = l.Addr().String()
+	if got != want {
+		t.Errorf("Addr() = %s; want %s", got, want)
+	}
+	l.Close()
+
+	// test all ips, random port, ipv6
+	l, err = Listen("::", 0)
+	if err != nil {
+		log.Fatal(err)
+	}
+	want = "[::]:"              // ignore port
+	got = l.Addr().String()[:5] // ignore port
+	if got != want {
+		t.Errorf("Addr() = %s; want %s", got, want)
+	}
+	l.Close()
 }
