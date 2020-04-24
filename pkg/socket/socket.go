@@ -38,9 +38,10 @@ func parseIP(address string) (net.IP, net.IP) {
 	return ip.To4(), ip.To16()
 }
 
-// createSockAddr constructs a socket address from address and port
-func createSockaddr(address string, port int) (typ string, s unix.Sockaddr) {
-	ipv4, ipv6 := parseIP(address)
+// createSockAddr constructs a socket address from address
+func createSockaddr(address string) (typ string, s unix.Sockaddr) {
+	host, port := parseAddress(address)
+	ipv4, ipv6 := parseIP(host)
 	if ipv4 != nil {
 		sockaddr4 := &unix.SockaddrInet4{}
 		sockaddr4.Port = port

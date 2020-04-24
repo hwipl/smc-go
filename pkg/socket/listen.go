@@ -14,11 +14,8 @@ func Listen(address string) (net.Listener, error) {
 	var err error
 	var fd int
 
-	// parse address
-	host, port := parseAddress(address)
-
-	// construct socket address from address and port
-	typ, sockaddr := createSockaddr(host, port)
+	// construct socket address from address
+	typ, sockaddr := createSockaddr(address)
 	if typ == "err" {
 		return l, fmt.Errorf("Error parsing IP")
 	}

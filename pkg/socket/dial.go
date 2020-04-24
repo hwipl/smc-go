@@ -14,11 +14,8 @@ func Dial(address string) (net.Conn, error) {
 	var err error
 	var fd int
 
-	// parse address
-	host, port := parseAddress(address)
-
-	// construct socket address from address and port
-	typ, sockaddr := createSockaddr(host, port)
+	// construct socket address from address
+	typ, sockaddr := createSockaddr(address)
 	if typ == "err" {
 		return conn, fmt.Errorf("Error parsing IP")
 	}
