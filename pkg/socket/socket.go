@@ -1,7 +1,9 @@
 package socket
 
 import (
+	"log"
 	"net"
+	"strconv"
 
 	"golang.org/x/sys/unix"
 )
@@ -11,6 +13,20 @@ const (
 	protoIPv4 = 0
 	protoIPv6 = 1
 )
+
+// parseAddress parses a host:port address string and returns the host as
+// string and the port as int
+func parseAddress(address string) (string, int) {
+	host, p, err := net.SplitHostPort(address)
+	if err != nil {
+		log.Fatal(err)
+	}
+	port, err := strconv.Atoi(p)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return host, port
+}
 
 // parseIP parses the ip address in the string address and returns an IPv4 and
 // an IPv6 address
