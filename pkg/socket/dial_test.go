@@ -1,11 +1,8 @@
 package socket
 
 import (
-	"fmt"
 	"log"
 	"net"
-	"strconv"
-	"strings"
 	"testing"
 )
 
@@ -14,18 +11,13 @@ func TestDial(t *testing.T) {
 	var cc, cs net.Conn
 	var l net.Listener
 	var err error
-	var port int
 
 	// test ipv4
 	l, err = Listen("127.0.0.1:0")
 	if err != nil {
 		log.Fatal(err)
 	}
-	port, err = strconv.Atoi(strings.Split(l.Addr().String(), ":")[1])
-	if err != nil {
-		log.Fatal(err)
-	}
-	cc, err = Dial("127.0.0.1", port)
+	cc, err = Dial(l.Addr().String())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +25,7 @@ func TestDial(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	want = fmt.Sprintf("127.0.0.1:%d", port)
+	want = l.Addr().String()
 	got = cc.RemoteAddr().String()
 	if got != want {
 		t.Errorf("RemoteAddr() = %s; want %s", got, want)
@@ -47,11 +39,7 @@ func TestDial(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	port, err = strconv.Atoi(strings.Split(l.Addr().String(), "]:")[1])
-	if err != nil {
-		log.Fatal(err)
-	}
-	cc, err = Dial("::1", port)
+	cc, err = Dial(l.Addr().String())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -59,7 +47,7 @@ func TestDial(t *testing.T) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	want = fmt.Sprintf("[::1]:%d", port)
+	want = l.Addr().String()
 	got = cc.RemoteAddr().String()
 	if got != want {
 		t.Errorf("RemoteAddr() = %s; want %s", got, want)

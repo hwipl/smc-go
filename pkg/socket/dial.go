@@ -9,13 +9,16 @@ import (
 )
 
 // Dial creates a SMC connection to address and port
-func Dial(address string, port int) (net.Conn, error) {
+func Dial(address string) (net.Conn, error) {
 	var conn net.Conn
 	var err error
 	var fd int
 
+	// parse address
+	host, port := parseAddress(address)
+
 	// construct socket address from address and port
-	typ, sockaddr := createSockaddr(address, port)
+	typ, sockaddr := createSockaddr(host, port)
 	if typ == "err" {
 		return conn, fmt.Errorf("Error parsing IP")
 	}
