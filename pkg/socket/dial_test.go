@@ -17,7 +17,7 @@ func TestDial(t *testing.T) {
 	var port int
 
 	// test ipv4
-	l, err = Listen("127.0.0.1", 0)
+	l, err = Listen("127.0.0.1:0")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -43,7 +43,7 @@ func TestDial(t *testing.T) {
 	l.Close()
 
 	// test ipv6
-	l, err = Listen("::1", 0)
+	l, err = Listen("[::1]:0")
 	if err != nil {
 		log.Fatal(err)
 	}

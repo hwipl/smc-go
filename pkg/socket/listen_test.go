@@ -15,7 +15,7 @@ func TestListenSpecificIPv4(t *testing.T) {
 	var err error
 
 	// test specific ip, specific port, ipv4
-	l, err = Listen("127.0.0.1", 50001)
+	l, err = Listen("127.0.0.1:50001")
 	if err != nil {
 		t.Skip(err)
 	}
@@ -33,7 +33,7 @@ func TestListenSpecificAllIPv4(t *testing.T) {
 	var err error
 
 	// test all ips, specific port, ipv4
-	l, err = Listen("0.0.0.0", 50002)
+	l, err = Listen("0.0.0.0:50002")
 	if err != nil {
 		t.Skip(err)
 	}
@@ -51,7 +51,7 @@ func TestListenSpecificIPv6(t *testing.T) {
 	var err error
 
 	// test specific ip, specific port, ipv6
-	l, err = Listen("::1", 50003)
+	l, err = Listen("[::1]:50003")
 	if err != nil {
 		t.Skip(err)
 	}
@@ -69,7 +69,7 @@ func TestListenSpecificAllIPv6(t *testing.T) {
 	var err error
 
 	// test all ips, specific port, ipv6
-	l, err = Listen("::", 50004)
+	l, err = Listen("[::]:50004")
 	if err != nil {
 		t.Skip(err)
 	}
@@ -87,7 +87,7 @@ func TestListen(t *testing.T) {
 	var err error
 
 	// test specific ip, random port, ipv4
-	l, err = Listen("127.0.0.1", 0)
+	l, err = Listen("127.0.0.1:0")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -99,7 +99,7 @@ func TestListen(t *testing.T) {
 	l.Close()
 
 	// test all ips, random port, ipv4
-	l, err = Listen("0.0.0.0", 0)
+	l, err = Listen("0.0.0.0:0")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -111,7 +111,7 @@ func TestListen(t *testing.T) {
 	l.Close()
 
 	// test specific ip, random port, ipv6
-	l, err = Listen("::1", 0)
+	l, err = Listen("[::1]:0")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -123,7 +123,7 @@ func TestListen(t *testing.T) {
 	l.Close()
 
 	// test all ips, random port, ipv6
-	l, err = Listen("::", 0)
+	l, err = Listen("[::]:0")
 	if err != nil {
 		log.Fatal(err)
 	}

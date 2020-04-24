@@ -2,20 +2,37 @@ package socket
 
 import (
 	"fmt"
+	"log"
 	"net"
 	"os"
+	"strconv"
 
 	"golang.org/x/sys/unix"
 )
 
-// Listen creates a SMC listener that listens on address and port
-func Listen(address string, port int) (net.Listener, error) {
+func parseAddress(address string) (string, int) {
+	host, p, err := net.SplitHostPort(address)
+	if err != nil {
+		log.Fatal(err)
+	}
+	port, err := strconv.Atoi(p)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return host, port
+}
+
+// Listen creates a SMC listener that listens on address
+func Listen(address string) (net.Listener, error) {
 	var l net.Listener
 	var err error
 	var fd int
 
+	// parse address
+	host, port := parseAddress(address)
+
 	// construct socket address from address and port
-	typ, sockaddr := createSockaddr(address, port)
+	typ, sockaddr := createSockaddr(host, port)
 	if typ == "err" {
 		return l, fmt.Errorf("Error parsing IP")
 	}
