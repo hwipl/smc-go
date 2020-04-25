@@ -1,6 +1,7 @@
 package socket
 
 import (
+	"context"
 	"log"
 	"net"
 	"strconv"
@@ -28,20 +29,26 @@ func parseAddress(address string) (string, int) {
 	return host, port
 }
 
-// parseIP parses the ip address in the string address and returns an IPv4 and
-// an IPv6 address
-func parseIP(address string) (net.IP, net.IP) {
-	ip := net.ParseIP(address)
-	if ip == nil {
-		return nil, nil
+// parseIP parses and resolves the ip address in the host string and returns an
+// IPv4 or IPv6 address
+func parseIP(address string) *net.IPAddr {
+	ipaddrs, err := net.DefaultResolver.LookupIPAddr(context.Background(),
+		address)
+	if err != nil {
+		return nil
 	}
-	return ip.To4(), ip.To16()
+	return &ipaddrs[0]
 }
 
 // createSockAddr constructs a socket address from address
 func createSockaddr(address string) (typ string, s unix.Sockaddr) {
 	host, port := parseAddress(address)
-	ipv4, ipv6 := parseIP(host)
+	ipaddr := parseIP(host)
+	if ipaddr == nil {
+		return "err", nil
+	}
+	ipv4 := ipaddr.IP.To4()
+	ipv6 := ipaddr.IP.To16()
 	if ipv4 != nil {
 		sockaddr4 := &unix.SockaddrInet4{}
 		sockaddr4.Port = port
