@@ -58,6 +58,14 @@ func createSockaddr(address string) (typ string, s unix.Sockaddr) {
 	if ipv6 != nil {
 		sockaddr6 := &unix.SockaddrInet6{}
 		sockaddr6.Port = port
+		if ipaddr.Zone != "" {
+			// set ipv6 zone/scope (device id) in sockaddr
+			dev, err := net.InterfaceByName(ipaddr.Zone)
+			if err != nil {
+				return "err", nil
+			}
+			sockaddr6.ZoneId = uint32(dev.Index)
+		}
 		copy(sockaddr6.Addr[:], ipv6[:net.IPv6len])
 		return "ipv6", sockaddr6
 	}
