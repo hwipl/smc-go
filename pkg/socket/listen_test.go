@@ -173,6 +173,42 @@ func TestListenNoHostNoPort(t *testing.T) {
 	l.Close()
 }
 
+func TestListenServiceNameIPv4(t *testing.T) {
+	var want, got string
+	var l net.Listener
+	var err error
+
+	// test specific ip, service name, ipv4
+	l, err = Listen("127.0.0.1:inspider")
+	if err != nil {
+		t.Skip(err)
+	}
+	want = "127.0.0.1:49150"
+	got = l.Addr().String()
+	if got != want {
+		t.Errorf("Addr() = %s; want %s", got, want)
+	}
+	l.Close()
+}
+
+func TestListenServiceNameIPv6(t *testing.T) {
+	var want, got string
+	var l net.Listener
+	var err error
+
+	// test specific ip, service name, ipv6
+	l, err = Listen("[::1]:inspider")
+	if err != nil {
+		t.Skip(err)
+	}
+	want = "[::1]:49150"
+	got = l.Addr().String()
+	if got != want {
+		t.Errorf("Addr() = %s; want %s", got, want)
+	}
+	l.Close()
+}
+
 func TestListen(t *testing.T) {
 	var want, got string
 	var l net.Listener
