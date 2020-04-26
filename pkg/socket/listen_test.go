@@ -155,6 +155,24 @@ func TestListenNoPort(t *testing.T) {
 	l.Close()
 }
 
+func TestListenNoHostNoPort(t *testing.T) {
+	var want, got string
+	var l net.Listener
+	var err error
+
+	// test without host, no port
+	l, err = Listen(":")
+	if err != nil {
+		log.Fatal(err)
+	}
+	want = "0.0.0.0:"
+	got = l.Addr().String()[:8]
+	if got != want {
+		t.Errorf("Addr() = %s; want %s", got, want)
+	}
+	l.Close()
+}
+
 func TestListen(t *testing.T) {
 	var want, got string
 	var l net.Listener
