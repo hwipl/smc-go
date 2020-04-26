@@ -35,6 +35,35 @@ func TestDialHostname(t *testing.T) {
 	l.Close()
 }
 
+func TestDialIPv6Zone(t *testing.T) {
+	var want, got string
+	var cc, cs net.Conn
+	var l net.Listener
+	var err error
+
+	// test ipv6 with zone
+	l, err = Listen("[::1%lo]:50102")
+	if err != nil {
+		t.Skip(err)
+	}
+	cc, err = Dial("[::1%lo]:50102")
+	if err != nil {
+		log.Fatal(err)
+	}
+	cs, err = l.Accept()
+	if err != nil {
+		log.Fatal(err)
+	}
+	want = l.Addr().String()
+	got = cc.RemoteAddr().String()
+	if got != want {
+		t.Errorf("RemoteAddr() = %s; want %s", got, want)
+	}
+	cc.Close()
+	cs.Close()
+	l.Close()
+}
+
 func TestDial(t *testing.T) {
 	var want, got string
 	var cc, cs net.Conn
