@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"net"
-	"strconv"
 
 	"golang.org/x/sys/unix"
 )
@@ -30,7 +29,8 @@ func parseAddress(address string) (string, int) {
 		// default to unspecified port if no port given
 		p = "0"
 	}
-	port, err := strconv.Atoi(p)
+	// lookup service name and convert port number
+	port, err := net.LookupPort("tcp", p)
 	if err != nil {
 		log.Fatal(err)
 	}
