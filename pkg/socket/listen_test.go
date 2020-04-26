@@ -100,6 +100,24 @@ func TestListenHostname(t *testing.T) {
 	l.Close()
 }
 
+func TestListenIPv6Zone(t *testing.T) {
+	var want, got string
+	var l net.Listener
+	var err error
+
+	// test specific ip, specific port, ipv6 with zone
+	l, err = Listen("[::1%lo]:50006")
+	if err != nil {
+		t.Skip(err)
+	}
+	want = "[::1]:50006"
+	got = l.Addr().String()
+	if got != want {
+		t.Errorf("Addr() = %s; want %s", got, want)
+	}
+	l.Close()
+}
+
 func TestListen(t *testing.T) {
 	var want, got string
 	var l net.Listener
