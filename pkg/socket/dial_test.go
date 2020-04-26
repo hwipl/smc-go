@@ -93,6 +93,35 @@ func TestDialNoHost(t *testing.T) {
 	l.Close()
 }
 
+func TestDialServiceName(t *testing.T) {
+	var want, got string
+	var cc, cs net.Conn
+	var l net.Listener
+	var err error
+
+	// test service name instead of port number
+	l, err = Listen("127.0.0.1:inspider")
+	if err != nil {
+		t.Skip(err)
+	}
+	cc, err = Dial("127.0.0.1:inspider")
+	if err != nil {
+		log.Fatal(err)
+	}
+	cs, err = l.Accept()
+	if err != nil {
+		log.Fatal(err)
+	}
+	want = l.Addr().String()
+	got = cc.RemoteAddr().String()
+	if got != want {
+		t.Errorf("RemoteAddr() = %s; want %s", got, want)
+	}
+	cc.Close()
+	cs.Close()
+	l.Close()
+}
+
 func TestDial(t *testing.T) {
 	var want, got string
 	var cc, cs net.Conn
