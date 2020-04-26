@@ -118,6 +118,25 @@ func TestListenIPv6Zone(t *testing.T) {
 	l.Close()
 }
 
+func TestListenNoHost(t *testing.T) {
+	var want4, want6, got string
+	var l net.Listener
+	var err error
+
+	// test without host, specific port
+	l, err = Listen(":50007")
+	if err != nil {
+		t.Skip(err)
+	}
+	want4 = "0.0.0.0:50007"
+	want6 = "[::]:50007"
+	got = l.Addr().String()
+	if got != want4 && got != want6 {
+		t.Errorf("Addr() = %s; want %s or %s", got, want4, want6)
+	}
+	l.Close()
+}
+
 func TestListen(t *testing.T) {
 	var want, got string
 	var l net.Listener
