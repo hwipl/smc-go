@@ -6,6 +6,35 @@ import (
 	"testing"
 )
 
+func TestDialHostname(t *testing.T) {
+	var want, got string
+	var cc, cs net.Conn
+	var l net.Listener
+	var err error
+
+	// test hostname
+	l, err = Listen("localhost:50101")
+	if err != nil {
+		t.Skip(err)
+	}
+	cc, err = Dial("localhost:50101")
+	if err != nil {
+		log.Fatal(err)
+	}
+	cs, err = l.Accept()
+	if err != nil {
+		log.Fatal(err)
+	}
+	want = l.Addr().String()
+	got = cc.RemoteAddr().String()
+	if got != want {
+		t.Errorf("RemoteAddr() = %s; want %s", got, want)
+	}
+	cc.Close()
+	cs.Close()
+	l.Close()
+}
+
 func TestDial(t *testing.T) {
 	var want, got string
 	var cc, cs net.Conn
