@@ -22,6 +22,10 @@ func parseAddress(address string) (string, int) {
 	if err != nil {
 		log.Fatal(err)
 	}
+	if host == "" {
+		// default to unspecified address if no host given
+		host = "0.0.0.0" // TODO: use ipv6?
+	}
 	port, err := strconv.Atoi(p)
 	if err != nil {
 		log.Fatal(err)
