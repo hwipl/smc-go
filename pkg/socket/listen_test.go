@@ -81,6 +81,25 @@ func TestListenSpecificAllIPv6(t *testing.T) {
 	l.Close()
 }
 
+func TestListenHostname(t *testing.T) {
+	var want4, want6, got string
+	var l net.Listener
+	var err error
+
+	// test with hostname, specific port
+	l, err = Listen("localhost:50005")
+	if err != nil {
+		t.Skip(err)
+	}
+	want4 = "127.0.0.1:50005"
+	want6 = "[::1]:50005"
+	got = l.Addr().String()
+	if got != want4 && got != want6 {
+		t.Errorf("Addr() = %s; want %s or %s", got, want4, want6)
+	}
+	l.Close()
+}
+
 func TestListen(t *testing.T) {
 	var want, got string
 	var l net.Listener
