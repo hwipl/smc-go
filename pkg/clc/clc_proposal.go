@@ -7,6 +7,7 @@ import (
 	"net"
 )
 
+// CLC Poposal message lengths and offsets
 const (
 	ProposalLen      = 52 // minimum length
 	IPv6PrefixLen    = 17

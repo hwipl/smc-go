@@ -3,6 +3,7 @@ package clc
 import "log"
 
 const (
+	// TrailerLen is the length of a CLC message trailer
 	TrailerLen = EyecatcherLen
 )
 

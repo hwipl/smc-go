@@ -2,12 +2,14 @@ package clc
 
 import "bytes"
 
+// SMC-R and SMC-D eyecatchers
 var (
 	SMCREyecatcher = []byte{0xE2, 0xD4, 0xC3, 0xD9}
 	SMCDEyecatcher = []byte{0xE2, 0xD4, 0xC3, 0xC4}
 )
 
 const (
+	// EyecatcherLen is the length of an eyecatcher
 	EyecatcherLen = 4
 )
 

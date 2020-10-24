@@ -5,6 +5,7 @@ import (
 	"fmt"
 )
 
+// Common header smc paths/types, length and message types
 const (
 	// smc type/path
 	SMCTypeR = 0 // SMC-R only

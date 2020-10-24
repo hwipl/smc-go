@@ -8,6 +8,7 @@ import (
 )
 
 const (
+	// AcceptSMCRLen is the length of a CLC SMC-R Accept message
 	AcceptSMCRLen = 68
 )
 

@@ -7,6 +7,7 @@ import (
 )
 
 var (
+	// SMCOption is the content of the tcp experimental option
 	SMCOption = SMCREyecatcher
 )
 

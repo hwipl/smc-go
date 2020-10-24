@@ -9,8 +9,10 @@ import (
 const (
 	// DeclineLen is the length of a clc decline message in bytes
 	DeclineLen = 28
+)
 
-	// decline diagnosis codes (linux)
+// decline diagnosis codes (linux)
+const (
 	DeclineMem        = 0x01010000 // insufficient memory resources
 	DeclineTimeoutCL  = 0x02010000 // timeout w4 QP confirm link
 	DeclineTimeoutAL  = 0x02020000 // timeout w4 QP add link

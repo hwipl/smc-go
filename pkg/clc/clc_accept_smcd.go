@@ -7,6 +7,7 @@ import (
 )
 
 const (
+	// AcceptSMCDLen is the length of a CLC SMC-D Accept message
 	AcceptSMCDLen = 48
 )
 
