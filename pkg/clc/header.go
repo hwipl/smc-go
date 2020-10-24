@@ -10,6 +10,7 @@ const (
 	// smc type/path
 	SMCTypeR = 0 // SMC-R only
 	SMCTypeD = 1 // SMC-D only
+	SMCTypeN = 2 // neither SMC-R nor SMC-D
 	SMCTypeB = 3 // SMC-R and SMC-D
 
 	// HeaderLen is the length of the clc header in bytes
@@ -51,6 +52,8 @@ func (p Path) String() string {
 		return "SMC-R"
 	case SMCTypeD:
 		return "SMC-D"
+	case SMCTypeN:
+		return "No SMC-R/SMC-D"
 	case SMCTypeB:
 		return "SMC-R + SMC-D"
 	default:
