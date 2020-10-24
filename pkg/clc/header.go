@@ -80,6 +80,7 @@ type Header struct {
 	Version  uint8 // (4 bits)
 	Flag     uint8 // (1 bit)
 	reserved byte  // (1 bit)
+	Pathv2   Path  // (2 bits, uses the previous 2 bits!)
 	Path     Path  // (2 bits)
 }
 
@@ -94,11 +95,12 @@ func (h *Header) Parse(buf []byte) {
 	// length
 	h.Length = binary.BigEndian.Uint16(buf[5:7])
 
-	// 1 byte bitfield: version, flag, reserved, path
+	// 1 byte bitfield: version, flag/reserved or pathv2, path
 	bitfield := buf[7]
 	h.Version = (bitfield & 0b11110000) >> 4
 	h.Flag = (bitfield & 0b00001000) >> 3
 	h.reserved = (bitfield & 0b00000100) >> 2
+	h.Pathv2 = Path((bitfield & 0b00001100) >> 2)
 	h.Path = Path(bitfield & 0b00000011)
 }
 
@@ -106,6 +108,11 @@ func (h *Header) Parse(buf []byte) {
 func (h *Header) flagString() string {
 	switch h.Type {
 	case TypeProposal:
+		if h.Version == SMCv2 {
+			// SMCv2 proposals use pathv2 instead of flag
+			return fmt.Sprintf("Pathv2: %d", h.Path)
+		}
+		// SMCv1 or unknown
 		return fmt.Sprintf("Flag: %d", h.Flag)
 	case TypeAccept:
 		return fmt.Sprintf("First Contact: %d", h.Flag)
@@ -135,6 +142,11 @@ func (h *Header) Reserved() string {
 
 	headerFmt := "%s: Eyecatcher: %s, Type: %d (%s), Length: %d, " +
 		"Version: %d, %s, Reserved: %#x, Path: %s"
+	if h.Type == TypeProposal && h.Version == SMCv2 {
+		// SMCv2 proposals use pathv2 instead of reserved
+		headerFmt = "%s: Eyecatcher: %s, Type: %d (%s), Length: %d, " +
+			"Version: %d, %s, Path: %s"
+	}
 	return fmt.Sprintf(headerFmt, h.Type, h.Eyecatcher, h.Type, h.Type,
 		h.Length, h.Version, flg, h.reserved, h.Path)
 }
