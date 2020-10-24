@@ -7,6 +7,10 @@ import (
 
 // Common header smc paths/types, length and message types
 const (
+	// smc versions
+	SMCv1 = 1
+	SMCv2 = 2
+
 	// smc type/path
 	SMCTypeR = 0 // SMC-R only
 	SMCTypeD = 1 // SMC-D only
