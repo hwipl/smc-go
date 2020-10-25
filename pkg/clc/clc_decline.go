@@ -37,6 +37,13 @@ const (
 	DeclineErrRegRMB  = 0x09990003 // reg rmb failed
 )
 
+// clc operating system types
+const (
+	ZOS   = 1
+	Linux = 2
+	AIX   = 3
+)
+
 // PeerDiagnosis stores the decline diagnosis code in a decline message
 type PeerDiagnosis uint32
 
