@@ -140,13 +140,15 @@ func (h *Header) Reserved() string {
 	// construct string
 	flg := h.flagString()
 
-	headerFmt := "%s: Eyecatcher: %s, Type: %d (%s), Length: %d, " +
-		"Version: %d, %s, Reserved: %#x, Path: %s"
 	if h.Type == TypeProposal && h.Version == SMCv2 {
 		// SMCv2 proposals use pathv2 instead of reserved
-		headerFmt = "%s: Eyecatcher: %s, Type: %d (%s), Length: %d, " +
+		headerFmt := "%s: Eyecatcher: %s, Type: %d (%s), Length: %d, " +
 			"Version: %d, %s, Path: %s"
+		return fmt.Sprintf(headerFmt, h.Type, h.Eyecatcher, h.Type,
+			h.Type, h.Length, h.Version, flg, h.Path)
 	}
+	headerFmt := "%s: Eyecatcher: %s, Type: %d (%s), Length: %d, " +
+		"Version: %d, %s, Reserved: %#x, Path: %s"
 	return fmt.Sprintf(headerFmt, h.Type, h.Eyecatcher, h.Type, h.Type,
 		h.Length, h.Version, flg, h.reserved, h.Path)
 }
