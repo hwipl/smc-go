@@ -102,6 +102,25 @@ func (p PeerDiagnosis) String() string {
 	return fmt.Sprintf("%#x (%s)", uint32(p), diag)
 }
 
+// OSType is the operating system type
+type OSType uint8
+
+// String converts OSType to a string
+func (o OSType) String() string {
+	var os string
+	switch o {
+	case ZOS:
+		os = "z/OS"
+	case Linux:
+		os = "Linux"
+	case AIX:
+		os = "AIX"
+	default:
+		os = "unknown"
+	}
+	return fmt.Sprintf("%d (%s)", o, os)
+}
+
 // Decline stores a CLC Decline message
 type Decline struct {
 	Raw
