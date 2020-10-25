@@ -127,7 +127,8 @@ type Decline struct {
 	Header
 	SenderPeerID  PeerID        // sender peer id
 	PeerDiagnosis PeerDiagnosis // diagnosis information
-	reserved      [4]byte
+	OSType        OSType        // OS type (4 bits), only with SMCv2
+	reserved      [4]byte       // first byte contains OS type with SMCv2
 	Trailer
 }
 
@@ -137,6 +138,13 @@ func (d *Decline) String() string {
 		return "n/a"
 	}
 
+	if d.Version == SMCv2 {
+		// SMCv2 has an os type
+		declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, " +
+			"OS Type: %s, Trailer: %s"
+		return fmt.Sprintf(declineFmt, d.Header.String(),
+			d.SenderPeerID, d.PeerDiagnosis, d.OSType, d.Trailer)
+	}
 	declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, Trailer: %s"
 	return fmt.Sprintf(declineFmt, d.Header.String(), d.SenderPeerID,
 		d.PeerDiagnosis, d.Trailer)
@@ -149,6 +157,14 @@ func (d *Decline) Reserved() string {
 		return "n/a"
 	}
 
+	if d.Version == SMCv2 {
+		// SMCv2 has an os type in first reserved byte
+		declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, " +
+			"OS Type: %s, Reserved: %#x, Trailer: %s"
+		return fmt.Sprintf(declineFmt, d.Header.Reserved(),
+			d.SenderPeerID, d.PeerDiagnosis, d.OSType,
+			d.reserved, d.Trailer)
+	}
 	declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, Reserved: %#x, " +
 		"Trailer: %s"
 	return fmt.Sprintf(declineFmt, d.Header.Reserved(), d.SenderPeerID,
@@ -183,6 +199,11 @@ func (d *Decline) Parse(buf []byte) {
 
 	// reserved
 	copy(d.reserved[:], buf[:4])
+	if d.Version == SMCv2 {
+		// os type (4 highest bits of first byte of reserved)
+		d.OSType = OSType(buf[0] >> 4)
+		d.reserved[0] &= 0b00001111
+	}
 	buf = buf[4:]
 
 	// save trailer
