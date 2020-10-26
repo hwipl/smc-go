@@ -38,6 +38,7 @@ func NewMessage(buf []byte) (Message, uint16) {
 
 	// return new (empty) message of correct type
 	typ := buf[4]
+	ver := buf[7] >> 4
 	path := Path(buf[7] & 0b00000011)
 	switch typ {
 	case TypeProposal:
@@ -59,6 +60,9 @@ func NewMessage(buf []byte) (Message, uint16) {
 			return &ConfirmSMCD{}, length
 		}
 	case TypeDecline:
+		if ver == SMCv2 {
+			return &DeclineV2{}, length
+		}
 		return &Decline{}, length
 	}
 

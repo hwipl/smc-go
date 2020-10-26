@@ -37,13 +37,6 @@ const (
 	DeclineErrRegRMB  = 0x09990003 // reg rmb failed
 )
 
-// clc operating system types
-const (
-	ZOS   = 1
-	Linux = 2
-	AIX   = 3
-)
-
 // PeerDiagnosis stores the decline diagnosis code in a decline message
 type PeerDiagnosis uint32
 
@@ -102,25 +95,6 @@ func (p PeerDiagnosis) String() string {
 	return fmt.Sprintf("%#x (%s)", uint32(p), diag)
 }
 
-// OSType is the operating system type
-type OSType uint8
-
-// String converts OSType to a string
-func (o OSType) String() string {
-	var os string
-	switch o {
-	case ZOS:
-		os = "z/OS"
-	case Linux:
-		os = "Linux"
-	case AIX:
-		os = "AIX"
-	default:
-		os = "unknown"
-	}
-	return fmt.Sprintf("%d (%s)", o, os)
-}
-
 // Decline stores a CLC Decline message
 type Decline struct {
 	Raw
@@ -138,13 +112,6 @@ func (d *Decline) String() string {
 		return "n/a"
 	}
 
-	if d.Version == SMCv2 {
-		// SMCv2 has an os type
-		declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, " +
-			"OS Type: %s, Trailer: %s"
-		return fmt.Sprintf(declineFmt, d.Header.String(),
-			d.SenderPeerID, d.PeerDiagnosis, d.OSType, d.Trailer)
-	}
 	declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, Trailer: %s"
 	return fmt.Sprintf(declineFmt, d.Header.String(), d.SenderPeerID,
 		d.PeerDiagnosis, d.Trailer)
@@ -157,14 +124,6 @@ func (d *Decline) Reserved() string {
 		return "n/a"
 	}
 
-	if d.Version == SMCv2 {
-		// SMCv2 has an os type in first reserved byte
-		declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, " +
-			"OS Type: %s, Reserved: %#x, Trailer: %s"
-		return fmt.Sprintf(declineFmt, d.Header.Reserved(),
-			d.SenderPeerID, d.PeerDiagnosis, d.OSType,
-			d.reserved, d.Trailer)
-	}
 	declineFmt := "%s, Peer ID: %s, Peer Diagnosis: %s, Reserved: %#x, " +
 		"Trailer: %s"
 	return fmt.Sprintf(declineFmt, d.Header.Reserved(), d.SenderPeerID,
@@ -199,11 +158,6 @@ func (d *Decline) Parse(buf []byte) {
 
 	// reserved
 	copy(d.reserved[:], buf[:4])
-	if d.Version == SMCv2 {
-		// os type (4 highest bits of first byte of reserved)
-		d.OSType = OSType(buf[0] >> 4)
-		d.reserved[0] &= 0b00001111
-	}
 	buf = buf[4:]
 
 	// save trailer
