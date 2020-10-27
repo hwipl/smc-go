@@ -59,3 +59,12 @@ type ProposalV2 struct {
 func (p *ProposalV2) ipV4String() string {
 	return fmt.Sprintf("IPv4 Prefix: %s/%d, ", p.Prefix, p.PrefixLen)
 }
+
+// ipV6String converts the ipv6 info to a string
+func (p *ProposalV2) ipV6String() string {
+	ipInfo := fmt.Sprintf("IPv6 Prefix Count: %d", p.IPv6PrefixesCnt)
+	for _, prefix := range p.IPv6Prefixes {
+		ipInfo += fmt.Sprintf(", IPv6 Prefix: %s", prefix)
+	}
+	return ipInfo
+}
