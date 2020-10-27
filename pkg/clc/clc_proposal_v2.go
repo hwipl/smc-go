@@ -37,11 +37,11 @@ type ProposalV2 struct {
 	// CLC Proposal Message V2 Extension
 	EIDNumber uint8 // Number of EIDs in the EID Array Area
 	GIDNumber uint8 // Number of GIDs in the ISMv2 GID Array Area
-	reserved3 uint8
+	reserved3 byte
 	Release   uint8 // SMCv2 Release number (4 bits)
-	reserved4 uint8 // 3 bits
+	reserved4 byte  // 3 bits
 	SEIDInd   uint8 // SEID indicator (1 bit): 0 not present, 1 present
-	reserved5 uint16
+	reserved5 [2]byte
 	SMCDv2Off uint16 // SMC-Dv2 Extension Offset (if present)
 	reserved6 [32]byte
 	EIDArea   [8][32]byte // stores 0-8 EIDs, see EIDNumber
