@@ -108,3 +108,19 @@ func (p *ProposalV2) propV2ExtString() string {
 	return fmt.Sprintf(extFmt, p.EIDNumber, p.GIDNumber, p.Release,
 		p.SEIDInd, p.SMCDv2Off, eidArea)
 }
+
+// smcdV2ExtString converts the SMC-D v2 Extension GID Area to a string
+func (p *ProposalV2) smcdV2ExtGIDString() string {
+	gidArea := ""
+	for i, gid := range p.GIDArea {
+		if i >= int(p.GIDNumber) {
+			break
+		}
+		if i > 0 {
+			gidArea += ", "
+		}
+		gidArea += fmt.Sprintf("GID %d: %d, VCHID %d, %d", i, gid.GID,
+			i, gid.VCHID)
+	}
+	return gidArea
+}
