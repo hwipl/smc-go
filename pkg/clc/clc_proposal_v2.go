@@ -124,3 +124,16 @@ func (p *ProposalV2) smcdV2ExtGIDString() string {
 	}
 	return gidArea
 }
+
+// smcdV2ExtString converts the SMC-D v2 Extension to a string
+func (p *ProposalV2) smcdV2ExtString() string {
+	if p.Pathv2 != SMCTypeD && p.Pathv2 != SMCTypeB {
+		return ""
+	}
+
+	// GID area
+	gidArea := p.smcdV2ExtGIDString()
+
+	extFmt := "SEID: %s, GID Area: [%s]"
+	return fmt.Sprintf(extFmt, p.SEID, gidArea)
+}
