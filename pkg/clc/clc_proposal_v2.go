@@ -199,3 +199,17 @@ func (p *ProposalV2) propV2ExtReserved() string {
 		p.Release, p.reserved4, p.SEIDInd, p.reserved5, p.SMCDv2Off,
 		p.reserved6, eidArea)
 }
+
+// smcdV2ExtReserved converts the SMC-D v2 Extension to a string including
+// reserved message fields
+func (p *ProposalV2) smcdV2ExtReserved() string {
+	if p.Pathv2 != SMCTypeD && p.Pathv2 != SMCTypeB {
+		return ""
+	}
+
+	// GID area
+	gidArea := p.smcdV2ExtGIDString()
+
+	extFmt := "SEID: %s, Reserved: %#v, GID Area: [%s]"
+	return fmt.Sprintf(extFmt, p.SEID, gidArea)
+}
