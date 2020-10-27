@@ -213,3 +213,35 @@ func (p *ProposalV2) smcdV2ExtReserved() string {
 	extFmt := "SEID: %s, Reserved: %#v, GID Area: [%s]"
 	return fmt.Sprintf(extFmt, p.SEID, gidArea)
 }
+
+// Reserved converts the CLC Proposal message to a string including reserved
+// message fields
+func (p *ProposalV2) Reserved() string {
+	if p == nil {
+		return "n/a"
+	}
+
+	// optional ip/prefix info
+	ipInfo := p.ipInfoReserved()
+	if ipInfo != "" {
+		ipInfo = ", " + ipInfo
+	}
+
+	// clc proposal message v2 extension
+	propV2Ext := p.propV2ExtReserved()
+	if propV2Ext != "" {
+		propV2Ext = ", " + propV2Ext
+	}
+
+	// smc-d v2 extension
+	smcdV2Ext := p.smcdV2ExtReserved()
+	if smcdV2Ext != "" {
+		smcdV2Ext = ", " + smcdV2Ext
+	}
+	proposalFmt := "%s, Peer ID: %s, SMC-R GID: %s, RoCE MAC: %s, " +
+		"IP Area Offset: %d, SMC-D GID: %d, ISMv2 VCHID: %d, " +
+		"Reserved: %#x%s%s%s, Trailer: %s"
+	return fmt.Sprintf(proposalFmt, p.Header.Reserved(), p.SenderPeerID,
+		p.IBGID, p.IBMAC, p.IPAreaOffset, p.SMCDGID, p.ISMv2VCHID,
+		p.reserved, ipInfo, propV2Ext, smcdV2Ext, p.Trailer)
+}
