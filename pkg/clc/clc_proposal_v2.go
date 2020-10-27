@@ -1,6 +1,7 @@
 package clc
 
 import (
+	"fmt"
 	"net"
 )
 
@@ -52,4 +53,9 @@ type ProposalV2 struct {
 	GIDArea   [8]GIDEntry // stores 0-8 GIDs/VCHIDs, see GIDNumber
 
 	Trailer
+}
+
+// ipV4String converts the ipv4 info to a string
+func (p *ProposalV2) ipV4String() string {
+	return fmt.Sprintf("IPv4 Prefix: %s/%d, ", p.Prefix, p.PrefixLen)
 }
