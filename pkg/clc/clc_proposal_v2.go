@@ -77,3 +77,18 @@ func (p *ProposalV2) ipInfoString() string {
 
 	return p.ipV4String() + p.ipV6String()
 }
+
+// propV2ExtEIDString converts the Proposal v2 Extension EID Area to a string
+func (p *ProposalV2) propV2ExtEIDString() string {
+	eidArea := ""
+	for i, eid := range p.EIDArea {
+		if i >= int(p.EIDNumber) {
+			break
+		}
+		if i > 0 {
+			eidArea += ", "
+		}
+		eidArea += fmt.Sprintf("EID %d: %s", i, eid)
+	}
+	return eidArea
+}
