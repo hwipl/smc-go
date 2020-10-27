@@ -92,3 +92,19 @@ func (p *ProposalV2) propV2ExtEIDString() string {
 	}
 	return eidArea
 }
+
+// propV2ExtString converts the Proposal v2 Extension to a string
+func (p *ProposalV2) propV2ExtString() string {
+	if p.Pathv2 == SMCTypeN {
+		return ""
+	}
+
+	// EID area
+	eidArea := p.propV2ExtEIDString()
+
+	extFmt := "EID Number: %d, GID Number: %d, Release: %d, " +
+		"SEID Indicator: %d, SMCDv2 Extension Offset: %d, " +
+		"EID Area: [%s]"
+	return fmt.Sprintf(extFmt, p.EIDNumber, p.GIDNumber, p.Release,
+		p.SEIDInd, p.SMCDv2Off, eidArea)
+}
