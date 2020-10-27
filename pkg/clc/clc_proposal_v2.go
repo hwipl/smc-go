@@ -137,3 +137,35 @@ func (p *ProposalV2) smcdV2ExtString() string {
 	extFmt := "SEID: %s, GID Area: [%s]"
 	return fmt.Sprintf(extFmt, p.SEID, gidArea)
 }
+
+// String converts the CLC Proposal message to a string
+func (p *ProposalV2) String() string {
+	if p == nil {
+		return "n/a"
+	}
+
+	// optional ip/prefix info
+	ipInfo := p.ipInfoString()
+	if ipInfo != "" {
+		ipInfo = ", " + ipInfo
+	}
+
+	// clc proposal message v2 extension
+	propV2Ext := p.propV2ExtString()
+	if propV2Ext != "" {
+		propV2Ext = ", " + propV2Ext
+	}
+
+	// smc-d v2 extension
+	smcdV2Ext := p.smcdV2ExtString()
+	if smcdV2Ext != "" {
+		smcdV2Ext = ", " + smcdV2Ext
+	}
+
+	proposalFmt := "%s, Peer ID: %s, SMC-R GID: %s, RoCE MAC: %s, " +
+		"IP Area Offset: %d, SMC-D GID: %d, ISMv2 VCHID: %d%s%s%s, " +
+		"Trailer: %s"
+	return fmt.Sprintf(proposalFmt, p.Header.String(), p.SenderPeerID,
+		p.IBGID, p.IBMAC, p.IPAreaOffset, p.SMCDGID, p.ISMv2VCHID,
+		ipInfo, propV2Ext, smcdV2Ext, p.Trailer)
+}
