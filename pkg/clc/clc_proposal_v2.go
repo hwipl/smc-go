@@ -180,3 +180,22 @@ func (p *ProposalV2) ipInfoReserved() string {
 	return p.ipV4String() + fmt.Sprintf("Reserved: %#x, ", p.reserved2) +
 		p.ipV6String()
 }
+
+// propV2ExtReserved converts the Proposal v2 Extension to a string including
+// reserved message fields
+func (p *ProposalV2) propV2ExtReserved() string {
+	if p.Pathv2 == SMCTypeN {
+		return ""
+	}
+
+	// EID area
+	eidArea := p.propV2ExtEIDString()
+
+	extFmt := "EID Number: %d, GID Number: %d, Reserved: %#x, " +
+		"Release: %d, Reserved: %#x, SEID Indicator: %d, " +
+		"Reserved: %#x, SMCDv2 Extension Offset: %d, Reserved: %#x, " +
+		"EID Area: [%s]"
+	return fmt.Sprintf(extFmt, p.EIDNumber, p.GIDNumber, p.reserved3,
+		p.Release, p.reserved4, p.SEIDInd, p.reserved5, p.SMCDv2Off,
+		p.reserved6, eidArea)
+}
