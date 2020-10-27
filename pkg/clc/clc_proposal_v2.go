@@ -169,3 +169,14 @@ func (p *ProposalV2) String() string {
 		p.IBGID, p.IBMAC, p.IPAreaOffset, p.SMCDGID, p.ISMv2VCHID,
 		ipInfo, propV2Ext, smcdV2Ext, p.Trailer)
 }
+
+// ipInfoReserved converts the optional IP/Prefix information to a string
+// including reserved message fields
+func (p *ProposalV2) ipInfoReserved() string {
+	if p.Path == SMCTypeN {
+		return ""
+	}
+
+	return p.ipV4String() + fmt.Sprintf("Reserved: %#x, ", p.reserved2) +
+		p.ipV6String()
+}
