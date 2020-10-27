@@ -68,3 +68,12 @@ func (p *ProposalV2) ipV6String() string {
 	}
 	return ipInfo
 }
+
+// ipInfoString converts the optional IP/Prefix information to a string
+func (p *ProposalV2) ipInfoString() string {
+	if p.Path == SMCTypeN {
+		return ""
+	}
+
+	return p.ipV4String() + p.ipV6String()
+}
