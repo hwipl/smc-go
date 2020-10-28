@@ -1,6 +1,7 @@
 package clc
 
 import (
+	"bytes"
 	"encoding/binary"
 	"fmt"
 	"log"
@@ -18,6 +19,15 @@ const (
 	// SMCDv2ExtLen is the minimum SMC-D v2 Extension length
 	SMCDv2ExtLen = 48
 )
+
+// EID is a SMCv2 Enterprise ID
+type EID [EIDLen]byte
+
+// String converts an EID to a string
+func (e *EID) String() string {
+	end := bytes.IndexByte(e[:], 0)
+	return fmt.Sprintf("%s", e[:end])
+}
 
 // GIDEntry stores a SMC-D GID entry consisting of GID and VCHID
 type GIDEntry struct {
@@ -59,10 +69,10 @@ type ProposalV2 struct {
 	reserved5 [2]byte
 	SMCDv2Off uint16 // SMC-Dv2 Extension Offset (if present)
 	reserved6 [32]byte
-	EIDArea   [8][EIDLen]byte // stores 0-8 EIDs, see EIDNumber
+	EIDArea   [8]EID // stores 0-8 EIDs, see EIDNumber
 
 	// Optional SMC-Dv2 Extension
-	SEID      [EIDLen]byte
+	SEID      EID
 	reserved7 [16]byte
 	GIDArea   [8]GIDEntry // stores 0-8 GIDs/VCHIDs, see GIDNumber
 
@@ -102,7 +112,7 @@ func (p *ProposalV2) propV2ExtEIDString() string {
 		if i > 0 {
 			eidArea += ", "
 		}
-		eidArea += fmt.Sprintf("EID %d: %s", i, eid)
+		eidArea += fmt.Sprintf("EID %d: %s", i, &eid)
 	}
 	return eidArea
 }
@@ -149,7 +159,7 @@ func (p *ProposalV2) smcdV2ExtString() string {
 	gidArea := p.smcdV2ExtGIDString()
 
 	extFmt := "SEID: %s, GID Area: [%s]"
-	return fmt.Sprintf(extFmt, p.SEID, gidArea)
+	return fmt.Sprintf(extFmt, &p.SEID, gidArea)
 }
 
 // String converts the CLC Proposal message to a string
@@ -225,7 +235,7 @@ func (p *ProposalV2) smcdV2ExtReserved() string {
 	gidArea := p.smcdV2ExtGIDString()
 
 	extFmt := "SEID: %s, Reserved: %#v, GID Area: [%s]"
-	return fmt.Sprintf(extFmt, p.SEID, p.reserved7, gidArea)
+	return fmt.Sprintf(extFmt, &p.SEID, p.reserved7, gidArea)
 }
 
 // Reserved converts the CLC Proposal message to a string including reserved
