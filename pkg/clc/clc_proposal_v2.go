@@ -133,7 +133,7 @@ func (p *ProposalV2) smcdV2ExtGIDString() string {
 		if i > 0 {
 			gidArea += ", "
 		}
-		gidArea += fmt.Sprintf("GID %d: %d, VCHID %d, %d", i, gid.GID,
+		gidArea += fmt.Sprintf("GID %d: %d, VCHID %d: %d", i, gid.GID,
 			i, gid.VCHID)
 	}
 	return gidArea
