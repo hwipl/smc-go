@@ -117,7 +117,7 @@ func (p *ProposalV2) propV2ExtString() string {
 	eidArea := p.propV2ExtEIDString()
 
 	extFmt := "EID Number: %d, GID Number: %d, Release: %d, " +
-		"SEID Indicator: %d, SMCDv2 Extension Offset: %d, " +
+		"SEID Indicator: %d, SMC-Dv2 Extension Offset: %d, " +
 		"EID Area: [%s]"
 	return fmt.Sprintf(extFmt, p.EIDNumber, p.GIDNumber, p.Release,
 		p.SEIDInd, p.SMCDv2Off, eidArea)
@@ -207,7 +207,7 @@ func (p *ProposalV2) propV2ExtReserved() string {
 
 	extFmt := "EID Number: %d, GID Number: %d, Reserved: %#x, " +
 		"Release: %d, Reserved: %#x, SEID Indicator: %d, " +
-		"Reserved: %#x, SMCDv2 Extension Offset: %d, Reserved: %#x, " +
+		"Reserved: %#x, SMC-Dv2 Extension Offset: %d, Reserved: %#x, " +
 		"EID Area: [%s]"
 	return fmt.Sprintf(extFmt, p.EIDNumber, p.GIDNumber, p.reserved3,
 		p.Release, p.reserved4, p.SEIDInd, p.reserved5, p.SMCDv2Off,
