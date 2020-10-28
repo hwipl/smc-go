@@ -1,7 +1,9 @@
 package clc
 
 import (
+	"encoding/binary"
 	"fmt"
+	"log"
 	"net"
 )
 
@@ -256,4 +258,211 @@ func (p *ProposalV2) Reserved() string {
 	return fmt.Sprintf(proposalFmt, p.Header.Reserved(), p.SenderPeerID,
 		p.IBGID, p.IBMAC, p.IPAreaOffset, p.SMCDGID, p.ISMv2VCHID,
 		p.reserved, ipInfo, propV2Ext, smcdV2Ext, p.Trailer)
+}
+
+// Parse parses the SMCv2 CLC Proposal message in buf
+func (p *ProposalV2) Parse(buf []byte) {
+	// save raw message bytes
+	p.Raw.Parse(buf)
+
+	// parse CLC header
+	p.Header.Parse(buf)
+
+	// check if message is long enough
+	if p.Length < ProposalV2Len {
+		log.Println("Error parsing CLC Proposal v2: message too short")
+		errDump(buf[:p.Length])
+		return
+	}
+
+	// skip clc header
+	skip := HeaderLen
+
+	// sender peer ID
+	copy(p.SenderPeerID[:], buf[skip:skip+PeerIDLen])
+	skip += PeerIDLen
+
+	// ib GID is an IPv6 address
+	p.IBGID = make(net.IP, net.IPv6len)
+	copy(p.IBGID[:], buf[skip:skip+net.IPv6len])
+	skip += net.IPv6len
+
+	// ib MAC is a 6 byte MAC address
+	p.IBMAC = make(net.HardwareAddr, 6)
+	copy(p.IBMAC[:], buf[skip:skip+6])
+	skip += 6
+
+	// offset to ip area
+	p.IPAreaOffset = binary.BigEndian.Uint16(buf[skip : skip+2])
+	skip += 2
+
+	// smcd GID
+	p.SMCDGID = binary.BigEndian.Uint64(buf[skip : skip+8])
+	skip += 8
+
+	// ism v2 vchid
+	p.ISMv2VCHID = binary.BigEndian.Uint16(buf[skip : skip+2])
+	skip += 2
+
+	// smc v2 extension offset
+	p.SMCv2Offset = binary.BigEndian.Uint16(buf[skip : skip+2])
+	skip += 2
+
+	// reserved
+	copy(p.reserved[:], buf[skip:skip+28])
+	skip += 28
+
+	// parse optional ip/prefix info
+	if p.Path != SMCTypeN {
+		// make sure we do not read outside the message
+		if int(p.Length)-skip < net.IPv4len+1+2+1+TrailerLen {
+			log.Println("Error parsing CLC Proposal v2: " +
+				"IP Area Offset too big")
+			errDump(buf[:p.Length])
+			return
+		}
+
+		// IP/prefix is an IPv4 address
+		p.Prefix = make(net.IP, net.IPv4len)
+		copy(p.Prefix[:], buf[skip:skip+net.IPv4len])
+		skip += net.IPv4len
+
+		// prefix length
+		p.PrefixLen = uint8(buf[skip])
+		skip++
+
+		// reserved
+		copy(p.reserved2[:], buf[skip:skip+2])
+		skip += 2
+
+		// ipv6 prefix count
+		p.IPv6PrefixesCnt = uint8(buf[skip])
+		skip++
+
+		// parse ipv6 prefixes
+		for i := uint8(0); i < p.IPv6PrefixesCnt; i++ {
+			// make sure we are still inside the clc message
+			if int(p.Length)-skip < IPv6PrefixLen+TrailerLen {
+				log.Println("Error parsing CLC Proposal v2: " +
+					"IPv6 prefix count too big")
+				errDump(buf[:p.Length])
+				break
+			}
+			// create new ipv6 prefix entry
+			ip6prefix := IPv6Prefix{}
+
+			// parse prefix and fill prefix entry
+			ip6prefix.prefix = make(net.IP, net.IPv6len)
+			copy(ip6prefix.prefix[:], buf[skip:skip+net.IPv6len])
+			skip += net.IPv6len
+
+			// parse prefix length and fill prefix entry
+			ip6prefix.prefixLen = uint8(buf[skip])
+			skip++
+
+			// add to ipv6 prefixes
+			p.IPv6Prefixes = append(p.IPv6Prefixes, ip6prefix)
+		}
+	}
+
+	// parse proposal message v2 extension
+	if p.Pathv2 != SMCTypeN {
+		// make sure we do not read outside the message
+		if int(p.Length)-skip < ProposalV2ExtLen+TrailerLen {
+			log.Println("Error parsing CLC Proposal v2: " +
+				"Not enough space for Proposal v2 Extension")
+			errDump(buf[:p.Length])
+			return
+		}
+
+		// number of EIDs in EID Area
+		p.EIDNumber = buf[skip]
+		skip++
+
+		//number of GIDs in ISMv2 GID Array Area
+		p.GIDNumber = buf[skip]
+		skip++
+
+		// reserved
+		p.reserved3 = buf[skip]
+		skip++
+
+		// Release number (4 bits)
+		p.Release = buf[skip] >> 4
+		// reserved (3 bits)
+		p.reserved4 = (buf[skip] & 0b00001110) >> 1
+		// SEID indicator (1 bit)
+		p.SEIDInd = buf[skip] & 0b00000001
+		skip++
+
+		// reserved
+		copy(p.reserved5[:], buf[skip:skip+2])
+		skip += 2
+
+		// smcd v2 extension offset
+		p.SMCDv2Off = binary.BigEndian.Uint16(buf[skip : skip+2])
+		skip += 2
+
+		// reserved
+		copy(p.reserved6[:], buf[skip:skip+32])
+		skip += 32
+
+		// parse EIDs in EID Area
+		for i := uint8(0); i < p.EIDNumber; i++ {
+			// make sure we are still inside the clc message
+			if int(p.Length)-skip < EIDLen+TrailerLen {
+				log.Println("Error parsing CLC Proposal v2: " +
+					"EID number too big")
+				errDump(buf[:p.Length])
+				break
+			}
+
+			// parse EID
+			copy(p.EIDArea[i][:], buf[skip:skip+EIDLen])
+			skip += EIDLen
+		}
+	}
+
+	// parse optional smcd v2 extension
+	if p.Pathv2 == SMCTypeD || p.Pathv2 == SMCTypeB {
+		// make sure we do not read outside the message
+		if int(p.Length)-skip < SMCDv2ExtLen+TrailerLen {
+			log.Println("Error parsing CLC Proposal v2: " +
+				"Not enough space for SMC-D v2 Extension")
+			errDump(buf[:p.Length])
+			return
+		}
+
+		// SEID
+		copy(p.SEID[:], buf[skip:skip+32])
+		skip += 32
+
+		// reserved
+		copy(p.reserved7[:], buf[skip:skip+16])
+		skip += 16
+
+		// parse GIDs in GID Area
+		for i := uint8(0); i < p.GIDNumber; i++ {
+			// make sure we are still inside the clc message
+			if int(p.Length)-skip < 8+2+TrailerLen {
+				log.Println("Error parsing CLC Proposal v2: " +
+					"GID number too big")
+				errDump(buf[:p.Length])
+				break
+			}
+
+			// parse GID
+			p.GIDArea[i].GID = binary.BigEndian.Uint64(
+				buf[skip : skip+8])
+			skip += 8
+
+			// parse VCHID
+			p.GIDArea[i].VCHID = binary.BigEndian.Uint16(
+				buf[skip : skip+2])
+			skip += 2
+		}
+	}
+
+	// save trailer
+	p.Trailer.Parse(buf)
 }
