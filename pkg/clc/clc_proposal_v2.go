@@ -177,11 +177,11 @@ func (p *ProposalV2) String() string {
 	}
 
 	proposalFmt := "%s, Peer ID: %s, SMC-R GID: %s, RoCE MAC: %s, " +
-		"IP Area Offset: %d, SMC-D GID: %d, ISMv2 VCHID: %d%s%s%s, " +
-		"Trailer: %s"
+		"IP Area Offset: %d, SMC-D GID: %d, ISMv2 VCHID: %d, " +
+		"SMCv2 Extension Offset: %d%s%s%s, Trailer: %s"
 	return fmt.Sprintf(proposalFmt, p.Header.String(), p.SenderPeerID,
 		p.IBGID, p.IBMAC, p.IPAreaOffset, p.SMCDGID, p.ISMv2VCHID,
-		ipInfo, propV2Ext, smcdV2Ext, p.Trailer)
+		p.SMCv2Offset, ipInfo, propV2Ext, smcdV2Ext, p.Trailer)
 }
 
 // ipInfoReserved converts the optional IP/Prefix information to a string
@@ -254,10 +254,11 @@ func (p *ProposalV2) Reserved() string {
 	}
 	proposalFmt := "%s, Peer ID: %s, SMC-R GID: %s, RoCE MAC: %s, " +
 		"IP Area Offset: %d, SMC-D GID: %d, ISMv2 VCHID: %d, " +
-		"Reserved: %#x%s%s%s, Trailer: %s"
+		"SMCv2 Extension Offset: %d, Reserved: %#x%s%s%s, Trailer: %s"
 	return fmt.Sprintf(proposalFmt, p.Header.Reserved(), p.SenderPeerID,
 		p.IBGID, p.IBMAC, p.IPAreaOffset, p.SMCDGID, p.ISMv2VCHID,
-		p.reserved, ipInfo, propV2Ext, smcdV2Ext, p.Trailer)
+		p.SMCv2Offset, p.reserved, ipInfo, propV2Ext, smcdV2Ext,
+		p.Trailer)
 }
 
 // Parse parses the SMCv2 CLC Proposal message in buf
