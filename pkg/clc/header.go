@@ -110,7 +110,7 @@ func (h *Header) flagString() string {
 	case TypeProposal:
 		if h.Version == SMCv2 {
 			// SMCv2 proposals use pathv2 instead of flag
-			return fmt.Sprintf("Pathv2: %d", h.Path)
+			return fmt.Sprintf("Pathv2: %s", h.Pathv2)
 		}
 		// SMCv1 or unknown
 		return fmt.Sprintf("Flag: %d", h.Flag)
