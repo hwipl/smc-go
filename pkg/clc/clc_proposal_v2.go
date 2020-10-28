@@ -225,7 +225,7 @@ func (p *ProposalV2) smcdV2ExtReserved() string {
 	gidArea := p.smcdV2ExtGIDString()
 
 	extFmt := "SEID: %s, Reserved: %#v, GID Area: [%s]"
-	return fmt.Sprintf(extFmt, p.SEID, gidArea)
+	return fmt.Sprintf(extFmt, p.SEID, p.reserved7, gidArea)
 }
 
 // Reserved converts the CLC Proposal message to a string including reserved
