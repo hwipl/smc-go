@@ -32,7 +32,7 @@ func (o OSType) String() string {
 	return fmt.Sprintf("%d (%s)", o, os)
 }
 
-// Decline stores a SMCv2 CLC Decline message
+// DeclineV2 stores a SMCv2 CLC Decline message
 type DeclineV2 struct {
 	Raw
 	Header
