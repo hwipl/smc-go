@@ -7,7 +7,14 @@ import (
 
 // SMCv2 constants
 const (
+	// ProposalV2Len is the minimum length of a Proposal v2 message
+	ProposalV2Len = 84
+	// EIDLen is the length of an EID
 	EIDLen = 32
+	// ProposalV2ExtLen is the minimum Proposal v2 Extension length
+	ProposalV2ExtLen = 40
+	// SMCDv2ExtLen is the minimum SMC-D v2 Extension length
+	SMCDv2ExtLen = 48
 )
 
 // GIDEntry stores a SMC-D GID entry consisting of GID and VCHID
