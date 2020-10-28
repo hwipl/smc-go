@@ -5,6 +5,11 @@ import (
 	"net"
 )
 
+// SMCv2 constants
+const (
+	EIDLen = 32
+)
+
 // GIDEntry stores a SMC-D GID entry consisting of GID and VCHID
 type GIDEntry struct {
 	GID   uint64
@@ -45,10 +50,10 @@ type ProposalV2 struct {
 	reserved5 [2]byte
 	SMCDv2Off uint16 // SMC-Dv2 Extension Offset (if present)
 	reserved6 [32]byte
-	EIDArea   [8][32]byte // stores 0-8 EIDs, see EIDNumber
+	EIDArea   [8][EIDLen]byte // stores 0-8 EIDs, see EIDNumber
 
 	// Optional SMC-Dv2 Extension
-	SEID      [32]byte
+	SEID      [EIDLen]byte
 	reserved7 [16]byte
 	GIDArea   [8]GIDEntry // stores 0-8 GIDs/VCHIDs, see GIDNumber
 
