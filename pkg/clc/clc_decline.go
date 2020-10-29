@@ -22,6 +22,11 @@ const (
 	DeclineNoSMCDev   = 0x03030000 // no SMC device found (R or D)
 	DeclineNoSMCDDev  = 0x03030001 // no SMC-D device found
 	DeclineNoSMCRDev  = 0x03030002 // no SMC-R device found
+	DeclineNoISM2Supp = 0x03030003 // hardware has no ISMv2 support
+	DeclineNoV2Ext    = 0x03030004 // peer sent no clc v2 extension
+	DeclineNoV2DExt   = 0x03030005 // peer sent no clc SMC-Dv2 ext.
+	DeclineNoSEID     = 0x03030006 // peer sent no SEID
+	DeclineNoSMCD2Dev = 0x03030007 // no SMC-Dv2 device found
 	DeclineModeUnsupp = 0x03040000 // smc modes do not match (R or D)
 	DeclineRMBEEyeC   = 0x03050000 // peer has eyecatcher in RMBE
 	DeclineOptUnsupp  = 0x03060000 // fastopen sockopt not supported
@@ -66,6 +71,16 @@ func (p PeerDiagnosis) String() string {
 		diag = "no SMC-D device found"
 	case DeclineNoSMCRDev:
 		diag = "no SMC-R device found"
+	case DeclineNoISM2Supp:
+		diag = "hardware has no ISMv2 support"
+	case DeclineNoV2Ext:
+		diag = "peer sent no clc v2 extension"
+	case DeclineNoV2DExt:
+		diag = "peer sent no clc SMC-Dv2 ext."
+	case DeclineNoSEID:
+		diag = "peer sent no SEID"
+	case DeclineNoSMCD2Dev:
+		diag = "no SMC-Dv2 device found"
 	case DeclineModeUnsupp:
 		diag = "smc modes do not match (R or D)"
 	case DeclineRMBEEyeC:
