@@ -29,6 +29,10 @@ const (
 	DeclineDiffPrefix = 0x03070000 // IP prefix / subnet mismatch
 	DeclineGetVLANErr = 0x03080000 // err to get vlan id of ip device
 	DeclineISMVLANErr = 0x03090000 // err to reg vlan id on ism dev
+	DeclineNoActLink  = 0x030a0000 // no active smc-r link in lgr
+	DeclineNoSrvLink  = 0x030b0000 // SMC-R link from srv not found
+	DeclineVersMismat = 0x030c0000 // SMC version mismatch
+	DeclineMaxDMB     = 0x030d0000 // SMC-D DMB limit exceeded
 	DeclineSyncErr    = 0x04000000 // synchronization error
 	DeclinePeerDecl   = 0x05000000 // peer declined during handshake
 	DeclineInterr     = 0x09990000 // internal error
@@ -77,6 +81,14 @@ func (p PeerDiagnosis) String() string {
 		diag = "err to get vlan id of ip device"
 	case DeclineISMVLANErr:
 		diag = "err to reg vlan id on ism dev"
+	case DeclineNoActLink:
+		diag = "no active smc-r link in lgr"
+	case DeclineNoSrvLink:
+		diag = "SMC-R link from srv not found"
+	case DeclineVersMismat:
+		diag = "SMC version mismatch"
+	case DeclineMaxDMB:
+		diag = "SMC-D DMB limit exceeded"
 	case DeclineSyncErr:
 		diag = "synchronization error"
 	case DeclinePeerDecl:
