@@ -234,7 +234,7 @@ func (p *ProposalV2) smcdV2ExtReserved() string {
 	// GID area
 	gidArea := p.smcdV2ExtGIDString()
 
-	extFmt := "SEID: %s, Reserved: %#v, GID Area: [%s]"
+	extFmt := "SEID: %s, Reserved: %#x, GID Area: [%s]"
 	return fmt.Sprintf(extFmt, &p.SEID, p.reserved7, gidArea)
 }
 
