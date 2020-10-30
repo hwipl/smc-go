@@ -117,6 +117,10 @@ func (h *Header) flagString() string {
 	case TypeAccept:
 		return fmt.Sprintf("First Contact: %d", h.Flag)
 	case TypeConfirm:
+		if h.Version == SMCv2 && h.Path == SMCTypeD {
+			// SMC-Dv2 uses first contact flag
+			return fmt.Sprintf("First Contact: %d", h.Flag)
+		}
 		return fmt.Sprintf("Flag: %d", h.Flag)
 	case TypeDecline:
 		return fmt.Sprintf("Out of Sync: %d", h.Flag)
