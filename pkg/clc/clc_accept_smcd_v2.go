@@ -58,3 +58,15 @@ func (ac *AcceptSMCDv2) String() string {
 		ac.DMBEIdx, ac.DMBESize, ac.LinkID, ac.ISMv2VCHID, &ac.EID,
 		ac.fceString(), ac.Trailer)
 }
+
+// fceReserved converts the FCE in the SMCv2 CLC SMC-D Accept messate to a
+// string including reserved message fields
+func (ac *AcceptSMCDv2) fceReserved() string {
+	if ac.Length < AcceptSMCDv2FCELen {
+		return ""
+	}
+	fceFmt := ", Reserved: %#x, OS Type: %s, Release: %d, " +
+		"Reserved: %#x, Hostname: %s"
+	return fmt.Sprintf(fceFmt, ac.reserved4, ac.OSType, ac.Release,
+		ac.reserved5, &ac.Hostname)
+}
