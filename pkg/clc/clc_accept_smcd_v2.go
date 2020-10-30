@@ -44,3 +44,17 @@ func (ac *AcceptSMCDv2) fceString() string {
 	fceFmt := ", OS Type: %s, Release: %d, Hostname: %s"
 	return fmt.Sprintf(fceFmt, ac.OSType, ac.Release, &ac.Hostname)
 }
+
+// String converts the SMCv2 CLC SMC-D Accept message to a string
+func (ac *AcceptSMCDv2) String() string {
+	if ac == nil {
+		return "n/a"
+	}
+
+	acFmt := "%s, SMC-D GID: %d, SMC-D Token: %d, DMBE Index: %d, " +
+		"DMBE Size: %s, Link ID: %d, ISMv2 VCHID: %d, EID: %s%s, " +
+		"Trailer: %s"
+	return fmt.Sprintf(acFmt, ac.Header.String(), ac.GID, ac.Token,
+		ac.DMBEIdx, ac.DMBESize, ac.LinkID, ac.ISMv2VCHID, &ac.EID,
+		ac.fceString(), ac.Trailer)
+}
