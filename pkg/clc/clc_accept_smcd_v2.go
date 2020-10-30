@@ -70,3 +70,20 @@ func (ac *AcceptSMCDv2) fceReserved() string {
 	return fmt.Sprintf(fceFmt, ac.reserved4, ac.OSType, ac.Release,
 		ac.reserved5, &ac.Hostname)
 }
+
+// Reserved converts the SMCv2 CLC SMC-D Accept message to a string including
+// reserved message fields
+func (ac *AcceptSMCDv2) Reserved() string {
+	if ac == nil {
+		return "n/a"
+	}
+
+	acFmt := "%s, SMC-D GID: %d, SMC-D Token: %d, DMBE Index: %d, " +
+		"DMBE Size: %s, Reserved: %#x, Reserved: %#x, " +
+		"Link ID: %d, ISMv2 VCHID: %d, EID: %s, Reserved: %#x%s, " +
+		"Trailer: %s"
+	return fmt.Sprintf(acFmt, ac.Header.Reserved(), ac.GID,
+		ac.Token, ac.DMBEIdx, ac.DMBESize, ac.reserved,
+		ac.reserved2, ac.LinkID, ac.ISMv2VCHID, &ac.EID,
+		ac.reserved3, ac.fceReserved(), ac.Trailer)
+}
