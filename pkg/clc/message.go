@@ -52,6 +52,9 @@ func NewMessage(buf []byte) (Message, uint16) {
 		case SMCTypeR:
 			return &AcceptSMCR{}, length
 		case SMCTypeD:
+			if ver == SMCv2 {
+				return &AcceptSMCDv2{}, length
+			}
 			return &AcceptSMCD{}, length
 		}
 	case TypeConfirm:
