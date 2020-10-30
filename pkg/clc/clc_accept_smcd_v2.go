@@ -1,5 +1,9 @@
 package clc
 
+import (
+	"fmt"
+)
+
 const (
 	// AcceptSMCDv2Len is the miminum length of a SMCv2 SMC-D Accept msg
 	AcceptSMCDv2Len = 78
@@ -30,4 +34,13 @@ type AcceptSMCDv2 struct {
 	Hostname  EID // hostname has same format as EID
 
 	Trailer
+}
+
+// fceString converts the FCE in the SMCv2 CLC SMC-D Accept message to a string
+func (ac *AcceptSMCDv2) fceString() string {
+	if ac.Length < AcceptSMCDv2FCELen {
+		return ""
+	}
+	fceFmt := ", OS Type: %s, Release: %d, Hostname: %s"
+	return fmt.Sprintf(fceFmt, ac.OSType, ac.Release, &ac.Hostname)
 }
