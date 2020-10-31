@@ -7,22 +7,41 @@ import (
 )
 
 func TestParseCLCProposalV2SMCBIPv6(t *testing.T) {
-	// prepare smc-b (r + d) ipv6 proposal v2 message
-	ipv6Proposal := "e2d4c3d90100ef2f394498039babcdef" +
+	// prepare smc-b (r + d) ipv6 proposal v2 message:
+	// Eyecatcher, Type, Length, Version, Pathv2+Path, SenderPeerID
+	ipv6Proposal := "e2d4c3d9" + "01" + "00ef" + "2" + "f" +
+		"394498039babcdef" +
+		// IBGID
 		"fe800000000000009a039bfffeabcdef" +
-		"98039babcdef00280123456789abcdef" +
-		"12340019000000000000000000000000" +
+		// IBMAC, IPAreaOffset, SMCDGID
+		"98039babcdef" + "0028" + "0123456789abcdef" +
+		// ISMv2VCHID, SMCv2Offset, reserved
+		"1234" + "0019" + "000000000000000000000000" +
+		// reserved
 		"00000000000000000000000000000000" +
-		"00000000000000010000000000000000" +
-		"00000000000000018001010001000000" +
-		"40000000000000000000000000000000" +
+		// Prefix, PrefixLen, reserved2, IPv6PrefixesCnt, prefix
+		"00000000" + "00" + "0000" + "01" + "0000000000000000" +
+		// prefix, prefixLen, EIDNumber, GIDNumber, reserved3,
+		// Release+reserved4+SEIDInd, reserved5, SMCDv2Off
+		"0000000000000001" + "80" + "01" + "01" + "00" + "01" +
+		"0000" + "00" +
+		// SMCDv2Off 1 byte, reserved6 15 bytes
+		"40" + "000000000000000000000000000000" +
+		// reserved6 16 bytes
 		"00000000000000000000000000000000" +
-		"00546869734973534d43763245494430" +
+		// reserved6 1 byte, EID 15 bytes
+		"00" + "546869734973534d43763245494430" +
+		// EID 16 bytes
 		"31000000000000000000000000000000" +
-		"00546869734973534d43763245494430" +
+		// EID 1 byte, SEID 15 bytes
+		"00" + "546869734973534d43763245494430" +
+		// SEID 16 bytes
 		"32000000000000000000000000000000" +
-		"00000000000000000000000000000000" +
-		"00abcdef01234567890123" +
+		// SEID 1 byte, reserved7 15 bytes
+		"00" + "000000000000000000000000000000" +
+		// reserved7 1 byte, GID 8 bytes, VCHID 2 bytes
+		"00" + "abcdef0123456789" + "0123" +
+		// Trailer
 		"e2d4c3d9"
 	msg, err := hex.DecodeString(ipv6Proposal)
 	if err != nil {
