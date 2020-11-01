@@ -6,6 +6,8 @@ import (
 	"testing"
 )
 
+// TestParseCLCProposalV2SMCB tests parsing of a SMCv2 Proposal message without
+// prefix information, with SMCv2 Extension and with SMC-Dv2 Extension
 func TestParseCLCProposalV2SMCB(t *testing.T) {
 	// prepare smc-b (r + d) proposal v2 message:
 	// Eyecatcher, Type, Length, Version, Pathv2+Path, SenderPeerID
@@ -98,6 +100,9 @@ func TestParseCLCProposalV2SMCB(t *testing.T) {
 	}
 }
 
+// TestParseCLCProposalV2SMCBIPv4 tests parsing of a SMCv2 Proposal message
+// with IPv4-only prefix information, with SMCv2 Extension and with SMC-Dv2
+// Extension
 func TestParseCLCProposalV2SMCBIPv4(t *testing.T) {
 	// prepare smc-b (r + d) ipv4 proposal v2 message:
 	// Eyecatcher, Type, Length, Version, Pathv2+Path, SenderPeerID
@@ -194,6 +199,9 @@ func TestParseCLCProposalV2SMCBIPv4(t *testing.T) {
 	}
 }
 
+// TestParseCLCProposalV2SMCBIPv6 tests parsing of an SMCv2 Proposal message
+// with IPv6-only prefix information, with SMCv2 Extension and with SMC-Dv2
+// Extension
 func TestParseCLCProposalV2SMCBIPv6(t *testing.T) {
 	// prepare smc-b (r + d) ipv6 proposal v2 message:
 	// Eyecatcher, Type, Length, Version, Pathv2+Path, SenderPeerID
@@ -291,6 +299,9 @@ func TestParseCLCProposalV2SMCBIPv6(t *testing.T) {
 	}
 }
 
+// TestParseCLCProposalV2SMCBv1IPv4 tests parsing of a SMCv2 Proposal message
+// with IPv4-only prefix information, without SMCv2 Extension and without
+// SMC-Dv2 Extension
 func TestParseCLCProposalV2SMCBv1IPv4(t *testing.T) {
 	// prepare smc-b (r + d) ipv4 proposal v2 message:
 	// Eyecatcher, Type, Length, Version, Pathv2+Path, SenderPeerID
