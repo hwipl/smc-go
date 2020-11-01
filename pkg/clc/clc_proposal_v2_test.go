@@ -363,3 +363,69 @@ func TestParseCLCProposalV2SMCBv1IPv4(t *testing.T) {
 		t.Errorf("proposal.Reserved() = %s; want %s", got, want)
 	}
 }
+
+// TestParseCLCProposalV2SMCBv1IPv6 tests parsing of a SMCv2 Proposal message
+// with IPv6-only prefix information, without SMCv2 Extension and without
+// SMC-Dv2 Extension
+func TestParseCLCProposalV2SMCBv1IPv6(t *testing.T) {
+	// prepare smc-b (r + d) ipv4 proposal v2 message:
+	// Eyecatcher, Type, Length, Version, Pathv2+Path, SenderPeerID
+	msgBytes := "e2d4c3d9" + "01" + "006d" + "2" + "b" +
+		"394498039babcdef" +
+		// IBGID
+		"fe800000000000009a039bfffeabcdef" +
+		// IBMAC, IPAreaOffset, SMCDGID
+		"98039babcdef" + "0028" + "0123456789abcdef" +
+		// ISMv2VCHID, SMCv2Offset, reserved
+		"1234" + "0000" + "000000000000000000000000" +
+		// reserved
+		"00000000000000000000000000000000" +
+		// Prefix, PrefixLen, reserved2, IPv6PrefixesCnt
+		"00000000" + "00" + "0000" + "01" +
+		"00000000000000000000000000000001" + "80" +
+		// Trailer
+		"e2d4c3d9"
+	msg, err := hex.DecodeString(msgBytes)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// parse message
+	proposal, proposalLen := NewMessage(msg)
+	proposal.Parse(msg)
+
+	// check message length
+	if proposalLen != 109 {
+		t.Errorf("proposalLen = %d; want %d", proposalLen, 109)
+	}
+
+	// check output message without reserved fields
+	want := "Proposal: Eyecatcher: SMC-R, Type: 1 (Proposal), " +
+		"Length: 109, Version: 2, Pathv2: No SMC-R/SMC-D, " +
+		"Path: SMC-R + SMC-D, Peer ID: 14660@98:03:9b:ab:cd:ef, " +
+		"SMC-R GID: fe80::9a03:9bff:feab:cdef, " +
+		"RoCE MAC: 98:03:9b:ab:cd:ef, IP Area Offset: 40, " +
+		"SMC-D GID: 81985529216486895, ISMv2 VCHID: 4660, " +
+		"SMCv2 Extension Offset: 0, IPv4 Prefix: 0.0.0.0/0, " +
+		"IPv6 Prefix Count: 1, IPv6 Prefix: ::1/128, Trailer: SMC-R"
+	got := proposal.String()
+	if got != want {
+		t.Errorf("proposal.String() = %s; want %s", got, want)
+	}
+
+	// check output message with reserved fields
+	want = "Proposal: Eyecatcher: SMC-R, Type: 1 (Proposal), " +
+		"Length: 109, Version: 2, Pathv2: No SMC-R/SMC-D, " +
+		"Path: SMC-R + SMC-D, Peer ID: 14660@98:03:9b:ab:cd:ef, " +
+		"SMC-R GID: fe80::9a03:9bff:feab:cdef, " +
+		"RoCE MAC: 98:03:9b:ab:cd:ef, IP Area Offset: 40, " +
+		"SMC-D GID: 81985529216486895, ISMv2 VCHID: 4660, " +
+		"SMCv2 Extension Offset: 0, " +
+		"Reserved: 0x00000000000000000000000000000000000000000000" +
+		"000000000000, IPv4 Prefix: 0.0.0.0/0, Reserved: 0x0000, " +
+		"IPv6 Prefix Count: 1, IPv6 Prefix: ::1/128, Trailer: SMC-R"
+	got = proposal.Reserved()
+	if got != want {
+		t.Errorf("proposal.Reserved() = %s; want %s", got, want)
+	}
+}
