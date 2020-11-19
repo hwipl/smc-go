@@ -4,5 +4,5 @@ go 1.14
 
 require (
 	github.com/google/gopacket v1.1.19
-	golang.org/x/sys v0.0.0-20201101102859-da207088b7d1
+	golang.org/x/sys v0.0.0-20201119102817-f84b799fce68
 )
