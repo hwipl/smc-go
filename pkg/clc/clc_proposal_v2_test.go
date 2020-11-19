@@ -6,6 +6,40 @@ import (
 	"testing"
 )
 
+// TestEIDString tests EID to string conversion
+func TestEIDString(t *testing.T) {
+	// test empty EID
+	eid := EID{}
+	want := ""
+	got := eid.String()
+	if got != want {
+		t.Errorf("got %s; want %s", got, want)
+	}
+
+	// test EID with 0 byte
+	eid = EID{
+		0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31,
+	}
+	want = "11111111"
+	got = eid.String()
+	if got != want {
+		t.Errorf("got %s; want %s", got, want)
+	}
+
+	// test EID without 0 byte
+	eid = EID{
+		0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31,
+		0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31,
+		0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31,
+		0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31, 0x31,
+	}
+	want = "11111111111111111111111111111111"
+	got = eid.String()
+	if got != want {
+		t.Errorf("got %s; want %s", got, want)
+	}
+}
+
 // TestParseCLCProposalV2SMCB tests parsing of a SMCv2 Proposal message without
 // prefix information, with SMCv2 Extension and with SMC-Dv2 Extension
 func TestParseCLCProposalV2SMCB(t *testing.T) {
