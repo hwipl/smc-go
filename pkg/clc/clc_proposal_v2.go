@@ -26,6 +26,9 @@ type EID [EIDLen]byte
 // String converts an EID to a string
 func (e *EID) String() string {
 	end := bytes.IndexByte(e[:], 0)
+	if end == -1 {
+		end = len(e)
+	}
 	return fmt.Sprintf("%s", e[:end])
 }
 
