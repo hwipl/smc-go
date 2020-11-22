@@ -25,11 +25,16 @@ type EID [EIDLen]byte
 
 // String converts an EID to a string
 func (e *EID) String() string {
+	// trim trailing 0 bytes
 	end := bytes.IndexByte(e[:], 0)
 	if end == -1 {
 		end = len(e)
 	}
-	return fmt.Sprintf("%s", e[:end])
+
+	// trim trailing whitespace
+	s := bytes.TrimRight(e[:end], " ")
+
+	return fmt.Sprintf("%s", s)
 }
 
 // GIDEntry stores a SMC-D GID entry consisting of GID and VCHID
