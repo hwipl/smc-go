@@ -3,7 +3,7 @@ package clc
 import (
 	"testing"
 
-	"github.com/google/gopacket/layers"
+	"github.com/gopacket/gopacket/layers"
 )
 
 func TestCheckSMCOption(t *testing.T) {
