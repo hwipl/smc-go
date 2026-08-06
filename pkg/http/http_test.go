@@ -43,7 +43,7 @@ func TestPrintHTTP(t *testing.T) {
 	// get url with filled http buffer
 	url = fmt.Sprintf("http://localhost:%d/", port)
 	want = "hello world"
-	fmt.Fprintf(&h.Buffer, want)
+	fmt.Fprint(&h.Buffer, want)
 	got = getHTTPBody(url)
 	if got != want {
 		t.Errorf("got = %s; want %s", got, want)
